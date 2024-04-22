@@ -3,6 +3,8 @@ package org.wlc.feeder;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.yeauty.annotation.EnableWebSocket;
 
 /**
  * //TODO add class commment here
@@ -12,6 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("org.wlc.feeder.dao")
+@EnableWebSocket
+@EnableAspectJAutoProxy
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
