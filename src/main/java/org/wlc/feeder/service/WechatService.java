@@ -3,6 +3,7 @@ package org.wlc.feeder.service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
@@ -38,18 +39,18 @@ public class WechatService {
 
     private String GET_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN";
 
-    LoadingCache<String, Object> ACCESS_TOKEN_CACHE = CacheBuilder.newBuilder()
+    LoadingCache<String, AccessTokenAndOpenId> ACCESS_TOKEN_CACHE = CacheBuilder.newBuilder()
             .maximumSize(100)
-            .build(new CacheLoader<String, Object>() {
+            .build(new CacheLoader<String, AccessTokenAndOpenId>() {
                 @Override
-                public Object load(String code) throws Exception {
+                public AccessTokenAndOpenId load(String code) throws Exception {
                     return getAccessToken(code);
                 }
             });
 
-    public UserInfo getUserInfo(String code, String openId) throws ExecutionException {
+    public UserInfo getUserInfo(String code) throws ExecutionException {
         String url = null;
-        url = String.format(GET_USER_INFO_URL, ACCESS_TOKEN_CACHE.get(code), openId);
+        url = String.format(GET_USER_INFO_URL, ACCESS_TOKEN_CACHE.get(code).accessToken, ACCESS_TOKEN_CACHE.get(code).openId);
 
         String response = null;
         try {
@@ -64,7 +65,7 @@ public class WechatService {
         return GsonSingleton.getInstance().fromJson(response, UserInfo.class);
     }
 
-    public String getAccessToken(String code) throws BizException {
+    public AccessTokenAndOpenId getAccessToken(String code) throws BizException {
         String url = String.format(GET_ACCESS_TOKEN_URL, appId, appSecret, code);
 
         String response = null;
@@ -76,15 +77,18 @@ public class WechatService {
             throw new RuntimeException(e);
         }
 
-        JsonElement elmt = GsonSingleton.getInstance().fromJson(response, JsonObject.class).get("access_token");
+        AccessTokenAndOpenId accessTokenAndOpenId = GsonSingleton.getInstance().fromJson(response, AccessTokenAndOpenId.class);
 
-        if (elmt == null || elmt.getAsString() == null) {
+        if (accessTokenAndOpenId == null || accessTokenAndOpenId.accessToken == null) {
             log.error("getAccessToken error response {}", response);
             throw new BizException(BizExceptionCodeEnum.GET_WECHAT_ACCESS_TOKEN_ERROR);
         }
 
-        String access_token = elmt.getAsString();
+        return accessTokenAndOpenId;
+    }
 
-        return access_token;
+    class AccessTokenAndOpenId {
+        String accessToken;
+        String openId;
     }
 }

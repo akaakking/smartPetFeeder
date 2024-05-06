@@ -33,11 +33,11 @@ public class UserController {
      * 后端使用accessToken，请求微信服务器，拿到openId。
      */
     @PostMapping("/user/login/wechatLogin")
-    public ResponseEntity<String> wechatLogin(@RequestParam("code") String code, @RequestParam("openId") String openId) throws ExecutionException {
-        return ResponseEntity.ok(userService.wechatLogin(code, openId));
+    public ResponseEntity<String> wechatLogin(@RequestParam("code") String code) throws ExecutionException {
+        return ResponseEntity.ok(userService.wechatLogin(code));
     }
 
-    @GetMapping("/blog")
+    @GetMapping("/user/like/blog")
     public ResponseEntity<List<BlogDTO>> getBlog(@RequestParam Long id) {
         return ResponseEntity.ok(blogService.getBlogByUserId(id));
     }

@@ -27,7 +27,11 @@ public class BlogController {
 
     @PostMapping("/blog")
     public ResponseEntity<String> saveBlog(@RequestParam("image") MultipartFile image,
-                         @RequestBody BlogDTO blogDTO) throws IOException {
+                                           @RequestParam Long userId,
+                                           @RequestParam String title,
+                                           @RequestParam String titleSrc,
+                                           @RequestParam String content) throws IOException {
+        BlogDTO blogDTO = new BlogDTO(null,userId,title,titleSrc,content);
         String url = urlGenerateService.generateBlogUrl(blogService.saveBlog(image, blogDTO));
 
         return ResponseEntity.ok(url);

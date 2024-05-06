@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JetClientState">
+    <option name="folders">
+      <list>
+        <folderState>
+          <option name="id" value="18427666-8a4b-4dc1-aa56-730a2ff276a4" />
+          <option name="name" value="feeder" />
+          <option name="requests">
+            <list>
+              <requestState>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="disabled" value="true" />
+                      <option name="key" value="Authorization" />
+                      <option name="value" value="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMiLCJpYXQiOjE3MTM3NzkwOTYsImV4cCI6MTcxMzg2NTQ5Nn0.08fGNF7oZA19NH0njKxm2NPiW2wwdX8GBQ7zoWKRp7o" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="8bc7a1ed-7643-4b75-be0c-4d637d54478c" />
+                <option name="method" value="POST" />
+                <option name="name" value="New Request" />
+                <option name="queryParams">
+                  <list>
+                    <queryParamState>
+                      <option name="key" value="code" />
+                      <option name="value" value="0c34FH200KMW1S1b8Y100DqpZ314FH2C" />
+                    </queryParamState>
+                  </list>
+                </option>
+                <option name="url" value="http://localhost:8080/api/user/login/wechatLogin?code=0c34FH200KMW1S1b8Y100DqpZ314FH2C" />
+              </requestState>
+            </list>
+          </option>
+          <option name="sortWeight" value="1000000" />
+          <option name="syncProperties">
+            <synchronizationPropertiesState>
+              <option name="folderPath" value="$PROJECT_DIR$/.jetclient" />
+            </synchronizationPropertiesState>
+          </option>
+        </folderState>
+      </list>
+    </option>
+    <option name="id" value="c4ae0477-91ba-46af-a08e-fb5da933d16b" />
+  </component>
+</project>

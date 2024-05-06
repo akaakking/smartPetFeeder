@@ -25,9 +25,9 @@ public class UserService {
     @Resource
     private WechatService wechatService;
 
-    public String wechatLogin(String code, String openId) throws ExecutionException {
+    public String wechatLogin(String code) throws ExecutionException {
         // 获取用户信息
-        UserInfo userInfo = wechatService.getUserInfo(code, openId);
+        UserInfo userInfo = wechatService.getUserInfo(code);
 
         if (userInfo == null || userInfo.getOpenid() == null) {
             throw new RuntimeException("获取用户信息失败");

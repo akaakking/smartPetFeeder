@@ -23,13 +23,14 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader(AUTHORIZATION_HEADER);
 
         try {
-
             if (Objects.isNull(token) || Objects.isNull(JwtUtils.validateAndGetOpenId(token))) {
                 response.setStatus(401);
+                response.getWriter().write("Unauthorized: Invalid token");
                 return false;
             }
         } catch (Exception e) {
             response.setStatus(401);
+            response.getWriter().write("Unauthorized: Invalid token");
             return false;
         }
 

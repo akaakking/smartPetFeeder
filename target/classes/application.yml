@@ -4,3 +4,15 @@ spring:
     username: root
     password: 147258wang
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+feeder:
+  server:
+    ip: localhost
+
+image:
+  dir:
+    path: /home/wfh/feeder/images
+
+wechat:
+  appId: wxc14bf5a28502fbc6
+  appSecret: d558504d3dbf83bd9fa195ea11a3e872

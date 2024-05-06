@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,8 +21,8 @@ public class UploadService {
     @Value("${image.dir.path}")
     private String imageDirPath;
 
-    @Value("${server.ip}")
-    private String serverIp;
+    @Resource
+    private UrlGenerateService urlGenerateService;
 
     public String saveImage(MultipartFile image) throws IOException {
         // 1. 检查文件是否为空
@@ -39,9 +40,7 @@ public class UploadService {
         Files.copy(image.getInputStream(), targetPath);
 
         // 5. 返回保存后的文件URL（假设服务器提供静态资源访问，URL需根据实际部署情况调整）
-        String imageUrl = "http://" + serverIp + "/api/" + fileName; // 替换为实际的图片访问URL前缀
-
-        return imageUrl;
+        return urlGenerateService.generateImageUrl(fileName); //替换为实际的图片访问URL前缀
     }
 
     /**

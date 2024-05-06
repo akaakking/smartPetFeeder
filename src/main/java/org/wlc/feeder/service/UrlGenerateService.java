@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UrlGenerateService {
-    @Value("${server.ip}")
+    @Value("${feeder.server.ip}")
     private String serverIp;
 
     public String generateImageUrl(String id) {

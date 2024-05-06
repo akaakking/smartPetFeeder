@@ -37,18 +37,14 @@ CREATE TABLE pet
     age           INT,
     weight        DECIMAL(5, 2),
     birthdate     DATE,
-    pet_type      INT,
+    pet_type      VARCHAR(255),
     avatar        VARCHAR(255),
-    feeding_plan_json  VARCHAR(255),
+    feed_time_gap  VARCHAR(255),
+    breakfast VARCHAR(255),
+    lunch VARCHAR(255),
+    dinner VARCHAR(255),
     `description` TEXT,
     `deviceId`    VARCHAR(255)
-) ENGINE = InnoDB
-  CHARSET = utf8;
-CREATE TABLE pet_type
-(
-    id             INT AUTO_INCREMENT PRIMARY KEY,
-    type_name      VARCHAR(255),
-    breed_category VARCHAR(255)
 ) ENGINE = InnoDB
   CHARSET = utf8;
 COMMIT

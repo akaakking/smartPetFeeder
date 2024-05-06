@@ -17,3 +17,4 @@ public class LikesDTO {
     private Long blogId;
     private Integer likeStatus;
 }
+

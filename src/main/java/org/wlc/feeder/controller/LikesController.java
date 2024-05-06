@@ -1,5 +1,6 @@
 package org.wlc.feeder.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.LikesDTO;
 import org.wlc.feeder.service.LikesService;
@@ -24,7 +25,7 @@ public class LikesController {
     }
 
     @GetMapping("/blog/like/count")
-    public void getLikeCount(@RequestBody Long blogId) {
-        likesService.countUserLikes(blogId);
+    public ResponseEntity<Long> getLikeCount(@RequestParam Long blogId) {
+        return ResponseEntity.ok(likesService.countUserLikes(blogId));
     }
 }

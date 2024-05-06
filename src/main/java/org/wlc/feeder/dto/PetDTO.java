@@ -13,13 +13,17 @@ import lombok.Data;
 @Data
 public class PetDTO {
     private Long id;
+    private Long userId;
     private String name;
     private Boolean gender;
     private Integer age;
     private Long weight;
-    private Integer petType;
+    private String petType;
     private String avatar;
-    private String feedingPlanJson;
     private String description;
+    private String feedTimeGap;
+    private String breakfast;
+    private String lunch;
+    private String dinner;
     private String deviceId;
 }
