@@ -3,7 +3,10 @@ package org.wlc.feeder.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.BlogDTO;
+import org.wlc.feeder.dto.PetDTO;
+import org.wlc.feeder.dto.UserDTO;
 import org.wlc.feeder.service.BlogService;
+import org.wlc.feeder.service.PetService;
 import org.wlc.feeder.service.UserService;
 
 import javax.annotation.Resource;
@@ -25,6 +28,9 @@ public class UserController {
     @Resource
     private BlogService blogService;
 
+    @Resource
+    private PetService petService;
+
     /**
      * 微信三方登陆流程
      * <p>
@@ -37,8 +43,18 @@ public class UserController {
         return ResponseEntity.ok(userService.wechatLogin(code));
     }
 
+    @PostMapping("/user/info")
+    public void addUserInfo(@RequestBody UserDTO userDTO) {
+        userService.saveUserInfo(userDTO);
+    }
+
     @GetMapping("/user/like/blog")
     public ResponseEntity<List<BlogDTO>> getBlog(@RequestParam Long id) {
         return ResponseEntity.ok(blogService.getBlogByUserId(id));
+    }
+
+    @GetMapping("/user/pet")
+    public ResponseEntity<List<PetDTO>> getPet(@RequestParam Long userId) {
+        return ResponseEntity.ok(petService.getUserPet(userId));
     }
 }

@@ -9,7 +9,7 @@ import lombok.Data;
  * @Date 2024/4/20 下午9:37
  */
 @Data
-public class UserInfo {
+public class WechatSession {
     private String openid;
-    private String nickname;
+    private String session_key;
 }

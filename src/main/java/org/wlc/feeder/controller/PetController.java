@@ -5,6 +5,7 @@ import org.wlc.feeder.dto.PetDTO;
 import org.wlc.feeder.service.PetService;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 /**
  * //TODO add class commment here
@@ -19,7 +20,7 @@ public class PetController {
     private PetService petService;
 
     @PostMapping("pet")
-    public void savePet(@RequestBody PetDTO petDto) {
+    public void savePet(@ModelAttribute PetDTO petDto) throws IOException {
         petService.savePet(petDto);
     }
 

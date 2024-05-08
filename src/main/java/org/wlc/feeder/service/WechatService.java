@@ -3,20 +3,13 @@ package org.wlc.feeder.service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wlc.feeder.constant.GsonSingleton;
-import org.wlc.feeder.dto.wechat.UserInfo;
-import org.wlc.feeder.enums.BizExceptionCodeEnum;
-import org.wlc.feeder.exception.BizException;
+import org.wlc.feeder.dto.wechat.WechatSession;
 import org.wlc.feeder.util.HttpUtil;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -28,67 +21,42 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 @Service
 public class WechatService {
-    // todo
     @Value("${wechat.appId}")
     private String appId;
 
     @Value("${wechat.appSecret}")
     private String appSecret;
 
-    private String GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
+    private String GET_WECHAT_SESSION_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
 
-    private String GET_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN";
-
-    LoadingCache<String, AccessTokenAndOpenId> ACCESS_TOKEN_CACHE = CacheBuilder.newBuilder()
+    LoadingCache<String, WechatSession> WECHAT_SESSION_CACHE = CacheBuilder.newBuilder()
             .maximumSize(100)
-            .build(new CacheLoader<String, AccessTokenAndOpenId>() {
+            .build(new CacheLoader<String, WechatSession>() {
                 @Override
-                public AccessTokenAndOpenId load(String code) throws Exception {
-                    return getAccessToken(code);
+                public WechatSession load(String code) throws Exception {
+                    String url = String.format(GET_WECHAT_SESSION_URL, appId, appSecret, code);
+                    String response = null;
+                    try {
+                        response = HttpUtil.get(url);
+                    } catch (Exception e) {
+                        log.error("getWechatSession error: {}", e.getMessage());
+                        throw new RuntimeException(e);
+                    }
+
+                    log.info("getWechatSession response: {}", response);
+
+                    WechatSession wechatSession = GsonSingleton.getInstance().fromJson(response, WechatSession.class);
+
+                    if (wechatSession.getOpenid() == null) {
+                        log.error("getWechatSession error: {}", response);
+                        throw new RuntimeException("获取wechatSession出现错误");
+                    }
+
+                    return wechatSession;
                 }
             });
 
-    public UserInfo getUserInfo(String code) throws ExecutionException {
-        String url = null;
-        url = String.format(GET_USER_INFO_URL, ACCESS_TOKEN_CACHE.get(code).accessToken, ACCESS_TOKEN_CACHE.get(code).openId);
-
-        String response = null;
-        try {
-            response = HttpUtil.get(url);
-        } catch (Exception e) {
-            log.error("getUserInfo error: {}", e.getMessage());
-            throw new RuntimeException(e);
-        }
-
-        log.info("get userinfo response {} , from wechat", response);
-
-        return GsonSingleton.getInstance().fromJson(response, UserInfo.class);
-    }
-
-    public AccessTokenAndOpenId getAccessToken(String code) throws BizException {
-        String url = String.format(GET_ACCESS_TOKEN_URL, appId, appSecret, code);
-
-        String response = null;
-
-        try {
-            response = HttpUtil.get(url);
-        } catch (Exception e) {
-            log.error("getAccessToken error: {}", e.getMessage());
-            throw new RuntimeException(e);
-        }
-
-        AccessTokenAndOpenId accessTokenAndOpenId = GsonSingleton.getInstance().fromJson(response, AccessTokenAndOpenId.class);
-
-        if (accessTokenAndOpenId == null || accessTokenAndOpenId.accessToken == null) {
-            log.error("getAccessToken error response {}", response);
-            throw new BizException(BizExceptionCodeEnum.GET_WECHAT_ACCESS_TOKEN_ERROR);
-        }
-
-        return accessTokenAndOpenId;
-    }
-
-    class AccessTokenAndOpenId {
-        String accessToken;
-        String openId;
+    public WechatSession getWechatSession(String code) throws ExecutionException {
+        return WECHAT_SESSION_CACHE.get(code);
     }
 }

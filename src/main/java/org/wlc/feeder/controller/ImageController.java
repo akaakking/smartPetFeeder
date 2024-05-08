@@ -1,5 +1,6 @@
 package org.wlc.feeder.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2024/4/22 下午3:46
  */
 @RestController
+@Slf4j
 @RequestMapping("/api")
 public class ImageController {
     @Value("${image.dir.path}")
@@ -27,9 +29,10 @@ public class ImageController {
     @javax.annotation.Resource
     private ResourceLoader resourceLoader;
 
-    @GetMapping("/{id}")
+    @GetMapping("/image/{id}")
     public ResponseEntity<Resource> getImage(@PathVariable("id") String id) {
         // 假设id为上传时生成的唯一文件名
+        log.info("read image");
         String filePath = imageDirPath + id; // 替换为实际的图片存储路径前缀
 
         Resource resource = resourceLoader.getResource(filePath);

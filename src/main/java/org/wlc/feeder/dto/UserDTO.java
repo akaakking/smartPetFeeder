@@ -1,6 +1,7 @@
 package org.wlc.feeder.dto;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -11,15 +12,16 @@ import lombok.Data;
  */
 @TableName("user")
 @Data
+@AllArgsConstructor
 public class UserDTO {
     private Long id;
     private String name;
     private String account;
+    private String avatar;
     private String password;
-    private String thirdAccount;
+    private String wechatId;
 
-    public UserDTO(String thirdAccount, String name) {
-        this.thirdAccount = thirdAccount;
-        this.name = name;
+    public UserDTO(String wechatId) {
+        this.wechatId = wechatId;
     }
 }

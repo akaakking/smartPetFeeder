@@ -2,6 +2,7 @@ package org.wlc.feeder.dto;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * //TODO add class commment here
@@ -26,4 +27,5 @@ public class PetDTO {
     private String lunch;
     private String dinner;
     private String deviceId;
+    private MultipartFile avatarFile;
 }
