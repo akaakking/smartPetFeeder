@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api")
 public class ActionController {
 
+    @Resource
     private ActionService actionService;
 
     // todo msgId 控制一个会话，但是这次不做这个东西。

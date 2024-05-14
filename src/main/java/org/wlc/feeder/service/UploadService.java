@@ -34,7 +34,7 @@ public class UploadService {
         String fileName = generateUniqueFileName(image.getOriginalFilename());
 
         // 3. 构建目标文件路径
-        Path targetPath = Paths.get(imageDirPath, fileName);
+        Path targetPath = Paths.get(imageDirPath.replace("file:",""), fileName);
 
         // 4. 保存文件到指定目录
         Files.copy(image.getInputStream(), targetPath);

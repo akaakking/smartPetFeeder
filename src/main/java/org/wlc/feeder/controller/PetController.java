@@ -3,6 +3,7 @@ package org.wlc.feeder.controller;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.PetDTO;
 import org.wlc.feeder.service.PetService;
+import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -20,7 +21,9 @@ public class PetController {
     private PetService petService;
 
     @PostMapping("pet")
-    public void savePet(@ModelAttribute PetDTO petDto) throws IOException {
+    public void savePet(@ModelAttribute PetDTO petDto, @RequestHeader("Authorization") String token) throws IOException {
+        String openId = JwtUtils.validateAndGetOpenId(token);
+        petDto.setUserId(Long.valueOf(openId));
         petService.savePet(petDto);
     }
 

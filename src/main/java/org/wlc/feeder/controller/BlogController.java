@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.wlc.feeder.dto.BlogDTO;
 import org.wlc.feeder.service.BlogService;
 import org.wlc.feeder.service.UrlGenerateService;
+import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -27,11 +28,11 @@ public class BlogController {
 
     @PostMapping("/blog")
     public ResponseEntity<String> saveBlog(@RequestParam("image") MultipartFile image,
-                                           @RequestParam Long userId,
-                                           @RequestParam String title,
-                                           @RequestParam String titleSrc,
-                                           @RequestParam String content) throws IOException {
-        BlogDTO blogDTO = new BlogDTO(null,userId,title,titleSrc,content);
+                                           @RequestParam("title") String title,
+                                           @RequestParam("titleSrc") String titleSrc,
+                                           @RequestParam("content") String content, @RequestHeader("Authorization") String token) throws IOException {
+        String userId = JwtUtils.validateAndGetOpenId(token);
+        BlogDTO blogDTO = new BlogDTO(null,Long.valueOf(userId),title,titleSrc,content);
         String url = urlGenerateService.generateBlogUrl(blogService.saveBlog(image, blogDTO));
 
         return ResponseEntity.ok(url);

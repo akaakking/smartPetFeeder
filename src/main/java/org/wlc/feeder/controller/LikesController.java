@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.LikesDTO;
 import org.wlc.feeder.service.LikesService;
+import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 
@@ -20,7 +21,9 @@ public class LikesController {
     private LikesService likesService;
 
     @PostMapping("/blog/like")
-    public void like(@RequestBody LikesDTO likesDTO) {
+    public void like(@RequestBody LikesDTO likesDTO,  @RequestHeader("Authorization") String token) {
+        String openId = JwtUtils.validateAndGetOpenId(token);
+        likesDTO.setUserId(Long.valueOf(openId));
         likesService.saveLikes(likesDTO);
     }
 
