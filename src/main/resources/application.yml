@@ -11,7 +11,7 @@ feeder:
 
 image:
   dir:
-    path: ~/feeder/images
+    path: file:/home/wfh/feeder/images/
 
 wechat:
   appId: wxc14bf5a28502fbc6

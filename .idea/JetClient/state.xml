@@ -58,6 +58,46 @@
                 <option name="name" value="New Request" />
                 <option name="url" value="http://localhost:8080/api/image/1715142431220_photo_2022-09-08_15-46-48.jpg" />
               </requestState>
+              <requestState>
+                <option name="id" value="cc0cb4f3-286f-44f1-b05e-228809dc7ce5" />
+                <option name="method" value="GET" />
+                <option name="name" value="New Request" />
+                <option name="queryParams">
+                  <list>
+                    <queryParamState>
+                      <option name="key" value="appid" />
+                      <option name="value" value="wxc14bf5a28502fbc6" />
+                    </queryParamState>
+                    <queryParamState>
+                      <option name="key" value="secret" />
+                      <option name="value" value="d558504d3dbf83bd9fa195ea11a3e872" />
+                    </queryParamState>
+                    <queryParamState>
+                      <option name="key" value="js_code" />
+                      <option name="value" value="0a3WSbll2gBNod4CMzll2NhuL50WSblH" />
+                    </queryParamState>
+                    <queryParamState>
+                      <option name="key" value="grant_type" />
+                      <option name="value" value="authorization_code" />
+                    </queryParamState>
+                  </list>
+                </option>
+                <option name="url" value="https://api.weixin.qq.com/sns/jscode2session?appid=wxc14bf5a28502fbc6&amp;secret=d558504d3dbf83bd9fa195ea11a3e872&amp;js_code=0a3WSbll2gBNod4CMzll2NhuL50WSblH&amp;grant_type=authorization_code" />
+              </requestState>
+              <requestState>
+                <option name="id" value="06826b8a-f9fb-475a-8de6-cae0944a2be8" />
+                <option name="method" value="POST" />
+                <option name="name" value="New Request" />
+                <option name="queryParams">
+                  <list>
+                    <queryParamState>
+                      <option name="key" value="code" />
+                      <option name="value" value="0a3mRkFa194qpH0IJ3Ga1VOFK04mRkF4" />
+                    </queryParamState>
+                  </list>
+                </option>
+                <option name="url" value="http://localhost:8080/api/user/login/wechatLogin?code=0a3mRkFa194qpH0IJ3Ga1VOFK04mRkF4" />
+              </requestState>
             </list>
           </option>
           <option name="sortWeight" value="1000000" />

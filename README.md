@@ -10,11 +10,11 @@
 
 ### user相关接口
 
-| 接口         | 地址                        | 请求方式 | 请求体                                                       | 返回参数 |
-| ------------ | --------------------------- | -------- | ------------------------------------------------------------ | -------- |
-| 登录         | /api/user/login/wechatLogin | post     | /api/user/login/wechatLogin?code=&openId=                    | token    |
-| 添加用户信息 | /api/user/info              | post     | {<br/>  "id": null,<br/>  "name": null,<br/>  "account": null,<br/>  "avatar": null,<br/>  "password": null,<br/>  "wechatId": "wechat_id_value"<br/>} | 无       |
-|              |                             |          |                                                              |          |
+| 接口          | 地址                        | 请求方式 | 请求体                                                       | 返回参数                                                     |
+| ------------- | --------------------------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 登录          | /api/user/login/wechatLogin | post     | /api/user/login/wechatLogin?code=&openId=                    | token                                                        |
+| 添加用户信息  | /api/user/info              | post     | {<br/>  "id": null,<br/>  "name": null,<br/>  "account": null,<br/>  "avatar": null,<br/>  "password": null,<br/>  "wechatId": "wechat_id_value"<br/>} | 无                                                           |
+| 获取用户 信息 | /api/user/info              | get      | 空                                                           | {<br/>  "id": null,<br/>  "name": null,<br/>  "account": null,<br/>  "avatar": null,<br/>  "password": null,<br/>  "wechatId": "wechat_id_value"<br/>} |
 
 ### 宠物相关接口
 

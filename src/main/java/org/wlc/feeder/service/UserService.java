@@ -41,11 +41,15 @@ public class UserService {
     }
 
     public void saveUserInfo(UserDTO userDTO) {
-        userMapper.update(userDTO, new QueryWrapper<UserDTO>().eq("wechat_Id", userDTO.getWechatId()));
+        userMapper.update(userDTO, new QueryWrapper<UserDTO>().eq("wechat_id", userDTO.getWechatId()));
+    }
+
+    public UserDTO getUserInfo(String openId) {
+        return userMapper.selectOne(new QueryWrapper<UserDTO>().eq("wechat_id", openId));
     }
 
     public void saveWechatUser(String wechatId) {
-        UserDTO userDTO = userMapper.selectOne(new QueryWrapper<UserDTO>().eq("wechat_Id", wechatId));
+        UserDTO userDTO = userMapper.selectOne(new QueryWrapper<UserDTO>().eq("wechat_id", wechatId));
 
         if (userDTO == null) {
             userMapper.insert(new UserDTO(wechatId));

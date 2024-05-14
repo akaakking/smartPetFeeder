@@ -27,7 +27,7 @@ public class WechatService {
     @Value("${wechat.appSecret}")
     private String appSecret;
 
-    private String GET_WECHAT_SESSION_URL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+    private String GET_WECHAT_SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
 
     LoadingCache<String, WechatSession> WECHAT_SESSION_CACHE = CacheBuilder.newBuilder()
             .maximumSize(100)
@@ -35,6 +35,8 @@ public class WechatService {
                 @Override
                 public WechatSession load(String code) throws Exception {
                     String url = String.format(GET_WECHAT_SESSION_URL, appId, appSecret, code);
+                    log.info(appId + appSecret + " "  + code);
+                    log.info(url);
                     String response = null;
                     try {
                         response = HttpUtil.get(url);

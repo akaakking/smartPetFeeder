@@ -48,4 +48,13 @@ CREATE TABLE pet
     `deviceId`    VARCHAR(255)
 ) ENGINE = InnoDB
   CHARSET = utf8;
+CREATE TABLE device
+(
+    id            BIGINT PRIMARY KEY,
+    user_id       BIGINT,
+    `name`        VARCHAR(255),
+    `description` TEXT,
+    `status`      TINYINT(1)
+) ENGINE = InnoDB
+  CHARSET = utf8;
 COMMIT

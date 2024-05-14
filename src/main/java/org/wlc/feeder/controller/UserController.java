@@ -8,6 +8,7 @@ import org.wlc.feeder.dto.UserDTO;
 import org.wlc.feeder.service.BlogService;
 import org.wlc.feeder.service.PetService;
 import org.wlc.feeder.service.UserService;
+import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -46,6 +47,12 @@ public class UserController {
     @PostMapping("/user/info")
     public void addUserInfo(@RequestBody UserDTO userDTO) {
         userService.saveUserInfo(userDTO);
+    }
+
+    @GetMapping("/user/info")
+    public ResponseEntity<UserDTO> getUserInfo(@RequestHeader("Authorization") String token) {
+        String openId = JwtUtils.validateAndGetOpenId(token);
+        return ResponseEntity.ok(userService.getUserInfo(openId));
     }
 
     @GetMapping("/user/like/blog")
