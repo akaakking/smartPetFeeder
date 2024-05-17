@@ -49,7 +49,6 @@ public class ActionService {
     }
 
     public String cameraRegular(String deviceId) {
-        // 返回一个接受流的地址 直接按照约定返回即可
         return null;
     }
 

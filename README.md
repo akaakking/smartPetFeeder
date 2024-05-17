@@ -27,4 +27,13 @@
 | 获取某人的宠物列表 | /api/user/pet | get      |                                                              |                                                              |
 
 
-// todo 1. 首页推荐 2. 我的发布
+
+### Action 相关接口
+
+| 接口           | 地址                     | 请求方式 | 请求体                             | 返回参数            |
+| -------------- | ------------------------ | -------- | ---------------------------------- | ------------------- |
+| 检测碗中食物   | /action/food/detect/bowl | get      | /action/food/detect/bowl?deviceId= | "还有食物/没有食物" |
+| 检测粮仓内食物 | /action/food/detect/silo | get      | /action/food/detect/silo?deviceid= | "还有食物/没有食物" |
+| 喂食           |                          |          |                                    |                     |
+| 设置喂食计划   |                          |          |                                    |                     |
+

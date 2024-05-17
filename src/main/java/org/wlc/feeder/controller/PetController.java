@@ -21,14 +21,14 @@ public class PetController {
     @Resource
     private PetService petService;
 
-    @PostMapping("pet")
+    @PostMapping("/pet")
     public void savePet(@ModelAttribute PetDTO petDto, @RequestHeader("Authorization") String token) throws IOException {
         String openId = JwtUtils.validateAndGetOpenId(token);
         petDto.setUserId(Long.valueOf(openId));
         petService.savePet(petDto);
     }
 
-    @GetMapping("pet")
+    @GetMapping("/pet")
     public ResponseEntity<PetDTO> getPet(@RequestParam("id") Long id) {
         return ResponseEntity.ok(petService.getPet(id));
     }

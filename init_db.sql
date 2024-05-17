@@ -45,7 +45,7 @@ CREATE TABLE pet
     lunch VARCHAR(255),
     dinner VARCHAR(255),
     `description` TEXT,
-    `deviceId`    VARCHAR(255)
+    `device_id`    VARCHAR(255)
 ) ENGINE = InnoDB
   CHARSET = utf8;
 CREATE TABLE device

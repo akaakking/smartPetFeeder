@@ -27,7 +27,6 @@ public class ActionController {
 
     // todo msgId 控制一个会话，但是这次不做这个东西。
 
-
     @GetMapping("/action/food/detect/bowl")
     public ResponseEntity<String> detectFoodBowl(@RequestParam String deviceId) throws ExecutionException, InterruptedException {
         return ResponseEntity.ok(actionService.detectFoodBowl(deviceId));
@@ -52,5 +51,4 @@ public class ActionController {
     public void cameraMove(@RequestParam String deviceId, @RequestParam String direction) {
         actionService.cameraMove(deviceId, direction);
     }
-
 }
