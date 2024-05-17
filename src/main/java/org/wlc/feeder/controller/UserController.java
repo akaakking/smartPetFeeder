@@ -46,7 +46,8 @@ public class UserController {
 
     @PostMapping("/user/info")
     public void addUserInfo(@RequestBody UserDTO userDTO, @RequestHeader("Authorization") String token) {
-        userDTO.setWechatId(JwtUtils.validateAndGetOpenId(token));
+        String userId = JwtUtils.validateAndGetOpenId(token);
+        userDTO.setId(Long.valueOf(userId));
         userService.saveUserInfo(userDTO);
     }
 
@@ -58,6 +59,12 @@ public class UserController {
 
     @GetMapping("/user/like/blog")
     public ResponseEntity<List<BlogDTO>> getBlog(@RequestHeader("Authorization") String token) {
+        String userId = JwtUtils.validateAndGetOpenId(token);
+        return ResponseEntity.ok(blogService.getUserLikeBlog(Long.valueOf(userId)));
+    }
+
+    @GetMapping("/user/blog")
+    public ResponseEntity<List<BlogDTO>> getUserBlog(@RequestHeader("Authorization") String token) {
         String userId = JwtUtils.validateAndGetOpenId(token);
         return ResponseEntity.ok(blogService.getBlogByUserId(Long.valueOf(userId)));
     }

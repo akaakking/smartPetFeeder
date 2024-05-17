@@ -1,5 +1,6 @@
 package org.wlc.feeder.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.PetDTO;
 import org.wlc.feeder.service.PetService;
@@ -28,7 +29,7 @@ public class PetController {
     }
 
     @GetMapping("pet")
-    public void getPet(@RequestBody PetDTO petDto) {
-        petService.getPet(petDto.getId());
+    public ResponseEntity<PetDTO> getPet(@RequestParam("id") Long id) {
+        return ResponseEntity.ok(petService.getPet(id));
     }
 }

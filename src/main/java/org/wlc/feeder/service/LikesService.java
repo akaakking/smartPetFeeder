@@ -3,9 +3,11 @@ package org.wlc.feeder.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import org.wlc.feeder.dao.LikesMapper;
+import org.wlc.feeder.dto.BlogDTO;
 import org.wlc.feeder.dto.LikesDTO;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * //TODO add class commment here
@@ -32,6 +34,10 @@ public class LikesService {
 
         record.setLikeStatus(likesDTO.getLikeStatus());
         likesMapper.updateById(record);
+    }
+
+    public List<LikesDTO> getUserLikes(Long userId) {
+        return likesMapper.selectList(new QueryWrapper<LikesDTO>().eq("user_id", userId));
     }
 
     public Long countUserLikes(Long blogId) {

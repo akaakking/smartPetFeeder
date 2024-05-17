@@ -10,6 +10,7 @@ import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * //TODO add class commment here
@@ -29,13 +30,17 @@ public class BlogController {
     @PostMapping("/blog")
     public ResponseEntity<String> saveBlog(@RequestParam("image") MultipartFile image,
                                            @RequestParam("title") String title,
-                                           @RequestParam("titleSrc") String titleSrc,
                                            @RequestParam("content") String content, @RequestHeader("Authorization") String token) throws IOException {
         String userId = JwtUtils.validateAndGetOpenId(token);
-        BlogDTO blogDTO = new BlogDTO(null,Long.valueOf(userId),title,titleSrc,content);
+        BlogDTO blogDTO = new BlogDTO(null,Long.valueOf(userId),title,null,content);
         String url = urlGenerateService.generateBlogUrl(blogService.saveBlog(image, blogDTO));
 
         return ResponseEntity.ok(url);
+    }
+
+    @GetMapping("/blog/all")
+    public ResponseEntity<List<BlogDTO>> getAll() {
+        return ResponseEntity.ok(blogService.getAll());
     }
 
     @GetMapping("/blog/{id}")

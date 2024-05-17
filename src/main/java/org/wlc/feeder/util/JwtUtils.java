@@ -10,12 +10,12 @@ public class JwtUtils {
     public static final String SECRET_KEY = "akaakking";
     public static final long EXPIRATION_TIME = 60 * 60 * 24 * 1000; // 24 hours in milliseconds
 
-    public static String generateToken(String openId) {
+    public static String generateToken(String userId) {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + EXPIRATION_TIME);
 
         String token = Jwts.builder()
-                .setSubject(openId)
+                .setSubject(userId)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

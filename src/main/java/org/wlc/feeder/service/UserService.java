@@ -34,25 +34,29 @@ public class UserService {
         }
 
         // 保存用户信息
-        saveWechatUser(wechatSession.getOpenid());
+        UserDTO userDTO = saveWechatUser(wechatSession.getOpenid());
 
         // 保存登录态
-        return JwtUtils.generateToken(wechatSession.getOpenid());
+        return JwtUtils.generateToken(String.valueOf(userDTO.getId()));
     }
 
     public void saveUserInfo(UserDTO userDTO) {
-        userMapper.update(userDTO, new QueryWrapper<UserDTO>().eq("wechat_id", userDTO.getWechatId()));
+        userMapper.update(userDTO, new QueryWrapper<UserDTO>().eq("user_id", userDTO.getId()));
     }
 
     public UserDTO getUserInfo(String openId) {
-        return userMapper.selectOne(new QueryWrapper<UserDTO>().eq("wechat_id", openId));
+        return userMapper.selectOne(new QueryWrapper<UserDTO>().eq("user_id", openId));
     }
 
-    public void saveWechatUser(String wechatId) {
+    public UserDTO saveWechatUser(String wechatId) {
         UserDTO userDTO = userMapper.selectOne(new QueryWrapper<UserDTO>().eq("wechat_id", wechatId));
 
         if (userDTO == null) {
-            userMapper.insert(new UserDTO(wechatId));
+            userDTO = new UserDTO(wechatId);
+            userMapper.insert(userDTO);
+            return userDTO;
         }
+
+        return userDTO;
     }
 }

@@ -7,7 +7,7 @@ CREATE TABLE blog
     user_id     BIGINT,
     title VARCHAR(255),
     title_src   VARCHAR(255),
-    content   VARCHAR(255)
+    content   TEXT
 ) ENGINE = InnoDB
   CHARSET = utf8;
 

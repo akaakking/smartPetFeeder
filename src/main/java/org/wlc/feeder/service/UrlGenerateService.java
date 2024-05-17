@@ -14,11 +14,14 @@ public class UrlGenerateService {
     @Value("${feeder.server.ip}")
     private String serverIp;
 
+    @Value("${feeder.server.port}")
+    private String serverPort;
+
     public String generateImageUrl(String id) {
-        return "http://" + serverIp + "/api/" + id;
+        return "http://" + serverIp + ":" + serverPort + "/api/image/" + id;
     }
 
     public String generateBlogUrl(Long id) {
-        return "http://" + serverIp + "/api/blog/" + id;
+        return "http://" + serverIp + ":" + serverPort + "/api/blog/" + id;
     }
 }

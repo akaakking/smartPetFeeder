@@ -7,6 +7,8 @@
 | 收藏/取消收藏 博客     | /api/blog/like       | post     | {      <br/>   "blogId": 456,        // 博客ID        <br/>   "likeStatus"         // 是否收藏 0：未收藏 1：已收藏 <br/>} |                                                              |
 | 获取某人收藏的博客列表 | /api/user/like/blog  | get      | /api/user/like/blog                                          | list下边这个<br />{<br/>  "id": 123,<br/>  "userId": 456,<br/>  "title": "Example Blog Title",<br/>  "titleSrc": "Source URL",<br/>  "content": "This is an example blog content."<br/>} |
 | 获取博客被收藏的个数   | /api/blog/like/count | get      | /api/blog/like/count?blogId=456                              | 数字                                                         |
+| 获取我发布的博客       | /api/user/blog       | get      |                                                              | {<br/>  "id": 123,<br/>  "userId": 456,<br/>  "title": "Example Blog Title",<br/>  "titleSrc": "Source URL",<br/>  "content": "This is an example blog content."<br/>} |
+| 获取全部博客           | /api/blog/all        | get      |                                                              | {<br/>  "id": 123,<br/>  "userId": 456,<br/>  "title": "Example Blog Title",<br/>  "titleSrc": "Source URL",<br/>  "content": "This is an example blog content."<br/>} |
 
 ### user相关接口
 
@@ -23,3 +25,6 @@
 | 保存宠物           | /api/pet      | post     | {  "id": 1,  ,  "name": "Buddy",  "gender": true,  "age": 5,  "weight": 15000,  "petType": "Dog",  "avatar": "path/to/avatar.jpg",  "description": "A friendly and energetic dog who loves long walks.",  "feedTimeGap": "8 hours",  "breakfast": "08:00",  "lunch": "12:00",  "dinner": "20:00",  "deviceId": "device123",  "avatarFile": null } |                                                              |
 | 获取宠物信息       | /api/pet      | get      |                                                              | {  "id": 1,  "userId": 1001,  "name": "Buddy",  "gender": true,  "age": 5,  "weight": 15000,  "petType": "Dog",  "avatar": "path/to/avatar.jpg",  "description": "A friendly and energetic dog who loves long walks.",  "feedTimeGap": "8 hours",  "breakfast": "08:00",  "lunch": "12:00",  "dinner": "20:00",  "deviceId": "device123",  "avatarFile": null } |
 | 获取某人的宠物列表 | /api/user/pet | get      |                                                              |                                                              |
+
+
+// todo 1. 首页推荐 2. 我的发布
