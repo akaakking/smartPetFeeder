@@ -36,6 +36,17 @@ public class LikesService {
         likesMapper.updateById(record);
     }
 
+    public Boolean likeBlog(Integer userId, Integer blogId) {
+        Long count = likesMapper.selectCount(new QueryWrapper<LikesDTO>().eq("user_id", userId).eq("blog_id", blogId));
+
+        if (count == null || count == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     public List<LikesDTO> getUserLikes(Integer userId) {
         return likesMapper.selectList(new QueryWrapper<LikesDTO>().eq("user_id", userId));
     }

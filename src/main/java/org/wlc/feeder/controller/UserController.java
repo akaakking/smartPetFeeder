@@ -1,11 +1,13 @@
 package org.wlc.feeder.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.BlogDTO;
 import org.wlc.feeder.dto.PetDTO;
 import org.wlc.feeder.dto.UserDTO;
 import org.wlc.feeder.service.BlogService;
+import org.wlc.feeder.service.LikesService;
 import org.wlc.feeder.service.PetService;
 import org.wlc.feeder.service.UserService;
 import org.wlc.feeder.util.JwtUtils;
@@ -31,6 +33,8 @@ public class UserController {
 
     @Resource
     private PetService petService;
+    @Autowired
+    private LikesService likesService;
 
     /**
      * 微信三方登陆流程
@@ -61,6 +65,12 @@ public class UserController {
     public ResponseEntity<List<BlogDTO>> getBlog(@RequestHeader("Authorization") String token) {
         String userId = JwtUtils.validateAndGetOpenId(token);
         return ResponseEntity.ok(blogService.getUserLikeBlog(Integer.valueOf(userId)));
+    }
+
+    @GetMapping("/user/has-liked-article")
+    public ResponseEntity<Boolean> getBlog(@RequestParam("blogId") Integer blogId, @RequestHeader("Authorization") String token) {
+        String userId = JwtUtils.validateAndGetOpenId(token);
+        return ResponseEntity.ok(likesService.likeBlog(Integer.valueOf(userId), blogId));
     }
 
     @GetMapping("/user/blog")

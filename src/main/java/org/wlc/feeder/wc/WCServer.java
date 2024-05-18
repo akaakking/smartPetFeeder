@@ -1,5 +1,7 @@
 package org.wlc.feeder.wc;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -29,25 +31,26 @@ import java.util.concurrent.ExecutionException;
 @ServerEndpoint(path = "/ws", port = "54188")
 @Slf4j
 public class WCServer {
-    private static final Map<String, Session> clientMap = new ConcurrentHashMap<>();
+    private static final BiMap<String, Session> clientMap = HashBiMap.create();
 
-    private static final Map<String, CompletableFuture> FUTURES = new ConcurrentHashMap<>();
+    private static final BiMap<String, CompletableFuture> FUTURES = HashBiMap.create();
 
     @Resource
     private DeviceService deviceService;
 
-    @BeforeHandshake
-    public void handshake(Session session, HttpHeaders headers, @RequestParam String req, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
-        log.info("handshake");
-        session.setSubprotocols("stomp");
-        if (!"ok".equals(req)) {
-            System.out.println("Authentication failed!");
-            session.close();
-        }
-    }
+//    @BeforeHandshake
+//    public void handshake(Session session, HttpHeaders headers, @RequestParam String req, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
+//        log.info("handshake");
+//        session.setSubprotocols("stomp");
+//        if (!"ok".equals(req)) {
+//            log.info("Authentication failed!");
+//            session.close();
+//        }
+//    }
 
     @OnOpen
     public void onOpen(Session session, HttpHeaders headers, @RequestParam String deviceId, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
+        log.info("open");
         clientMap.put(deviceId, session);
     }
 
@@ -63,12 +66,19 @@ public class WCServer {
 
     @OnMessage
     public void onMessage(Session session, String message) {
+        log.info(message);
         Message msg = GsonSingleton.getInstance().fromJson(message, Message.class);
 
         try {
             switch (msg.getCmd()) {
                 case "connect":
                     dealConnect(session, msg.getContent());
+                    break;
+                case "food_detect_bowl":
+                    dealFoodDetectBowl(session, msg);
+                    break;
+                case "food_detect_silo":
+                    dealFoodDetectSilo(session, msg);
                     break;
                 default:
                     break;
@@ -78,18 +88,34 @@ public class WCServer {
         }
     }
 
+    public void dealFoodDetectSilo(Session session, Message msg) throws ExecutionException, InterruptedException {
+        String deviceId = clientMap.inverse().get(session);
+
+        CompletableFuture completableFuture = FUTURES.get(deviceId);
+
+        completableFuture.complete(msg.getContent());
+    }
+
+    public void dealFoodDetectBowl(Session session, Message msg) throws ExecutionException, InterruptedException {
+        String deviceId = clientMap.inverse().get(session);
+
+        CompletableFuture completableFuture = FUTURES.get(deviceId);
+
+        completableFuture.complete(msg.getContent());
+    }
+
     public void dealConnect(Session session, String deviceId) throws BizException {
         if (clientMap.containsKey(deviceId)) {
-            sendMsg(session,"connect","该设备已连接");
+            sendMsg(session, "connect", "该设备已连接");
             log.error("该设备已连接 {}", deviceId);
         }
 
         if (!deviceService.deviceExist(deviceId)) {
-            sendMsg(session,"connect","该设备不存在");
+            sendMsg(session, "connect", "该设备不存在");
             log.error("device {} 不存在", deviceId);
         }
 
-        sendMsg(session,"connect", "连接成功");
+        sendMsg(session, "connect", "连接成功");
         clientMap.put(deviceId, session);
     }
 
@@ -131,7 +157,7 @@ public class WCServer {
 
         FUTURES.put(deviceId, result);
 
-        return  result;
+        return result;
     }
 
     public void sendMsgNoReturn(String deviceId, Message msg) {
