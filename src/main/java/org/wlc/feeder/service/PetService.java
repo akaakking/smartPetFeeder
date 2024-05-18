@@ -48,4 +48,8 @@ public class PetService {
     public List<PetDTO> getUserPet(Integer userId) {
         return petMapper.selectList(new QueryWrapper<PetDTO>().eq("user_id", userId));
     }
+
+    public void deletePet(Integer id) {
+        petMapper.deleteById(id);
+    }
 }

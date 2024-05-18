@@ -20,11 +20,12 @@
 
 ### 宠物相关接口
 
-| 接口               | 地址          | 请求方式 | 请求体                                                       | 返回参数                                                     |
-| ------------------ | ------------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 保存宠物           | /api/pet      | post     | {  "id": 1,  ,  "name": "Buddy",  "gender": true,  "age": 5,  "weight": 15000,  "petType": "Dog",  "avatar": "path/to/avatar.jpg",  "description": "A friendly and energetic dog who loves long walks.",  "feedTimeGap": "8 hours",  "breakfast": "08:00",  "lunch": "12:00",  "dinner": "20:00",  "deviceId": "device123",  "avatarFile": null } |                                                              |
-| 获取宠物信息       | /api/pet      | get      |                                                              | {  "id": 1,  "userId": 1001,  "name": "Buddy",  "gender": true,  "age": 5,  "weight": 15000,  "petType": "Dog",  "avatar": "path/to/avatar.jpg",  "description": "A friendly and energetic dog who loves long walks.",  "feedTimeGap": "8 hours",  "breakfast": "08:00",  "lunch": "12:00",  "dinner": "20:00",  "deviceId": "device123",  "avatarFile": null } |
-| 获取某人的宠物列表 | /api/user/pet | get      |                                                              |                                                              |
+| 接口               | 地址            | 请求方式 | 请求体                                                       | 返回参数                                                     |
+| ------------------ | --------------- | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 保存宠物           | /api/pet        | post     | {  "id": 1,  ,  "name": "Buddy",  "gender": true,  "age": 5,  "weight": 15000,  "petType": "Dog",  "avatar": "path/to/avatar.jpg",  "description": "A friendly and energetic dog who loves long walks.",  "feedTimeGap": "8 hours",  "breakfast": "08:00",  "lunch": "12:00",  "dinner": "20:00",  "deviceId": "device123",  "avatarFile": null } |                                                              |
+| 获取宠物信息       | /api/pet        | get      |                                                              | {  "id": 1,  "userId": 1001,  "name": "Buddy",  "gender": true,  "age": 5,  "weight": 15000,  "petType": "Dog",  "avatar": "path/to/avatar.jpg",  "description": "A friendly and energetic dog who loves long walks.",  "feedTimeGap": "8 hours",  "breakfast": "08:00",  "lunch": "12:00",  "dinner": "20:00",  "deviceId": "device123",  "avatarFile": null } |
+| 删除宠物           | /api/pet/delete | post     | /api/pet/delete?id=                                          | void                                                         |
+| 获取某人的宠物列表 | /api/user/pet   | get      |                                                              |                                                              |
 
 
 

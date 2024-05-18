@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NonNull;
@@ -26,6 +27,7 @@ public class PetDTO {
 
     @NotNull
     @NotBlank
+    @NotEmpty
     private String name;
     private Boolean gender;
     private Integer age;

@@ -33,4 +33,9 @@ public class PetController {
     public ResponseEntity<PetDTO> getPet(@RequestParam("id") Integer id) {
         return ResponseEntity.ok(petService.getPet(id));
     }
+
+    @PostMapping("/pet/delete")
+    public void deletePet(@RequestParam("id") Integer id) {
+        petService.deletePet(id);
+    }
 }
