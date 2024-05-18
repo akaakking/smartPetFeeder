@@ -36,16 +36,16 @@ public class ActionService {
         return message.getContent();
     }
 
-    public void feed(String deviceId, Integer duration) {
-        wcServer.sendMsgNoReturn(deviceId, new Message("feed", duration.toString()));
+    public void feed(String deviceId, Boolean status) {
+        wcServer.sendMsgNoReturn(deviceId, new Message("feed", String.valueOf(status)));
     }
 
     public void feedPlan(FeedPlan feedPlan) {
         wcServer.sendMsgNoReturn(feedPlan.getDeviceId(), new Message("feed_plan", feedPlan.toString()));
     }
 
-    public void cameraMove(String deviceId, String direction) {
-        wcServer.sendMsgNoReturn(deviceId,new Message("camera_move", direction));
+    public void cameraMove(String deviceId, Integer direction) {
+        wcServer.sendMsgNoReturn(deviceId,new Message("camera_move", direction * 15 + ""));
     }
 
     public String cameraRegular(String deviceId) {

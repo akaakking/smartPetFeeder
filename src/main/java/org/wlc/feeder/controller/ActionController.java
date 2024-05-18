@@ -34,8 +34,8 @@ public class ActionController {
     }
 
     @PostMapping("/action/feed")
-    public void feed(@RequestParam String deviceId, @RequestParam Integer duration) {
-        actionService.feed(deviceId, duration);
+    public void feed(@RequestParam String deviceId, @RequestParam Boolean status) {
+        actionService.feed(deviceId, status);
     }
 
     @GetMapping("/action/feedPlan")
@@ -44,7 +44,7 @@ public class ActionController {
     }
 
     @GetMapping("/action/camera/move")
-    public void cameraMove(@RequestParam String deviceId, @RequestParam String direction) {
+    public void cameraMove(@RequestParam String deviceId, @RequestParam Integer direction) {
         actionService.cameraMove(deviceId, direction);
     }
 }

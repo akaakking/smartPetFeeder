@@ -32,10 +32,11 @@
 
 ### Action 相关接口
 
-| 接口           | 地址                     | 请求方式 | 请求体                             | 返回参数            |
-| -------------- | ------------------------ | -------- | ---------------------------------- | ------------------- |
-| 检测碗中食物   | /action/food/detect/bowl | get      | /action/food/detect/bowl?deviceId= | "还有食物/没有食物" |
-| 检测粮仓内食物 | /action/food/detect/silo | get      | /action/food/detect/silo?deviceid= | "还有食物/没有食物" |
-| 喂食           |                          |          |                                    |                     |
-| 设置喂食计划   |                          |          |                                    |                     |
+| 接口           | 地址                         | 请求方式 | 请求体                                                       | 返回参数            |
+| -------------- | ---------------------------- | -------- | ------------------------------------------------------------ | ------------------- |
+| 检测碗中食物   | /api/action/food/detect/bowl | get      | /api/action/food/detect/bowl?deviceId=                       | "还有食物/没有食物" |
+| 检测粮仓内食物 | /api/action/food/detect/silo | get      | /api/action/food/detect/silo?deviceid=                       | "还有食物/没有食物" |
+| 喂食           | /api/action/start            | post     | /api/action/start?deviceId=&status=1/0(1开始0停止)           | void                |
+| 设置喂食计划   | /api/action/feedPlan         | post     | {<br/>  "deviceId": "device123",<br/>  "breakfast": "18:00",<br/>  "lunch": "18:00",<br/>  "dinner": "18:00",<br/>  "duration": "15"<br/>} | void                |
+| 移动摄像头     | /api/action/camera/move      | post     | /api/action/camera/move?deviceId&direction<br /><br />direction 为-1表示左为1表示右 | void                |
 

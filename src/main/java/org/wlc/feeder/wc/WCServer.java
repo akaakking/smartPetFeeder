@@ -2,23 +2,18 @@ package org.wlc.feeder.wc;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.timeout.IdleStateEvent;
+import jakarta.websocket.*;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ConcurrentReferenceHashMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.stereotype.Service;
 import org.wlc.feeder.constant.GsonSingleton;
 import org.wlc.feeder.exception.BizException;
 import org.wlc.feeder.service.DeviceService;
-import org.yeauty.annotation.*;
-import org.yeauty.pojo.Session;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -28,7 +23,8 @@ import java.util.concurrent.ExecutionException;
  * @Date 2024/4/10 下午2:27
  */
 @Component
-@ServerEndpoint(path = "/ws", port = "54188")
+@ServerEndpoint("/ws")
+@Service
 @Slf4j
 public class WCServer {
     private static final BiMap<String, Session> clientMap = HashBiMap.create();
@@ -37,22 +33,6 @@ public class WCServer {
 
     @Resource
     private DeviceService deviceService;
-
-//    @BeforeHandshake
-//    public void handshake(Session session, HttpHeaders headers, @RequestParam String req, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
-//        log.info("handshake");
-//        session.setSubprotocols("stomp");
-//        if (!"ok".equals(req)) {
-//            log.info("Authentication failed!");
-//            session.close();
-//        }
-//    }
-
-    @OnOpen
-    public void onOpen(Session session, HttpHeaders headers, @RequestParam String deviceId, @RequestParam MultiValueMap reqMap, @PathVariable String arg, @PathVariable Map pathMap) {
-        log.info("open");
-        clientMap.put(deviceId, session);
-    }
 
     @OnClose
     public void onClose(Session session) throws IOException {
@@ -120,40 +100,22 @@ public class WCServer {
     }
 
     private void sendMsg(Session session, String cmd, String content) {
-        session.sendText(GsonSingleton.getInstance().toJson(new Message(cmd, content)));
-    }
-
-    @OnBinary
-    public void onBinary(Session session, byte[] bytes) {
-        for (byte b : bytes) {
-            System.out.println(b);
-        }
-        session.sendBinary(bytes);
-    }
-
-    @OnEvent
-    public void onEvent(Session session, Object evt) {
-        if (evt instanceof IdleStateEvent) {
-            IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
-            switch (idleStateEvent.state()) {
-                case READER_IDLE:
-                    System.out.println("read idle");
-                    break;
-                case WRITER_IDLE:
-                    System.out.println("write idle");
-                    break;
-                case ALL_IDLE:
-                    System.out.println("all idle");
-                    break;
-                default:
-                    break;
-            }
+        try {
+            session.getBasicRemote().sendText(GsonSingleton.getInstance().toJson(new Message(cmd, content)));
+        } catch (IOException e) {
+            log.error("发送消息时出错",e);
+            throw new RuntimeException(e);
         }
     }
 
     public CompletableFuture<Message> sendMsg(String deviceId, Message msg) {
         CompletableFuture<Message> result = new CompletableFuture<>();
-        clientMap.get(deviceId).sendText(msg.toString());
+        try {
+            clientMap.get(deviceId).getBasicRemote().sendText(msg.toString());
+        } catch (IOException e) {
+            log.error("发送消息时出错",e);
+            throw new RuntimeException(e);
+        }
 
         FUTURES.put(deviceId, result);
 
@@ -161,6 +123,11 @@ public class WCServer {
     }
 
     public void sendMsgNoReturn(String deviceId, Message msg) {
-        clientMap.get(deviceId).sendText(msg.toString());
+        try {
+            clientMap.get(deviceId).getBasicRemote().sendText(msg.toString());
+        } catch (IOException e) {
+            log.error("发送消息时出错",e);
+            throw new RuntimeException(e);
+        }
     }
 }
