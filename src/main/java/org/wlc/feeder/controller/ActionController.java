@@ -4,12 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.FeedPlan;
 import org.wlc.feeder.service.ActionService;
-import org.wlc.feeder.wc.Message;
-import org.wlc.feeder.wc.WCServer;
 
 import javax.annotation.Resource;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**

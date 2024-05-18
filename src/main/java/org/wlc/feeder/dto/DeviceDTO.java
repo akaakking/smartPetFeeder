@@ -1,5 +1,6 @@
 package org.wlc.feeder.dto;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -12,9 +13,10 @@ import lombok.Data;
 @TableName("device")
 @Data
 public class DeviceDTO {
-    Long id;
+    @TableId
+    Integer id;
     String name;
     String description;
-    Long userId;
+    Integer userId;
     Boolean status;
 }

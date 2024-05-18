@@ -1,8 +1,13 @@
 package org.wlc.feeder.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -13,13 +18,18 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @TableName("pet")
 @Data
+@ToString // todo 头像昵称必填
 public class PetDTO {
-    private Long id;
-    private Long userId;
+    @TableId
+    private Integer id;
+    private Integer userId;
+
+    @NotNull
+    @NotBlank
     private String name;
     private Boolean gender;
     private Integer age;
-    private Long weight;
+    private Integer weight;
     private String petType;
     private String avatar;
     private String description;
@@ -29,5 +39,6 @@ public class PetDTO {
     private String dinner;
     private String deviceId;
     @TableField(exist = false)
+    @NotNull
     private MultipartFile avatarFile;
 }

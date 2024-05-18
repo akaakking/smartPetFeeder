@@ -32,7 +32,7 @@ public class BlogController {
                                            @RequestParam("title") String title,
                                            @RequestParam("content") String content, @RequestHeader("Authorization") String token) throws IOException {
         String userId = JwtUtils.validateAndGetOpenId(token);
-        BlogDTO blogDTO = new BlogDTO(null,Long.valueOf(userId),title,null,content);
+        BlogDTO blogDTO = new BlogDTO(null,Integer.valueOf(userId),title,null,content);
         String url = urlGenerateService.generateBlogUrl(blogService.saveBlog(image, blogDTO));
 
         return ResponseEntity.ok(url);
@@ -44,7 +44,7 @@ public class BlogController {
     }
 
     @GetMapping("/blog/{id}")
-    public ResponseEntity<BlogDTO> getBlog(@PathVariable("id") Long id) {
+    public ResponseEntity<BlogDTO> getBlog(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(blogService.getBlogById(id));
     }
 }

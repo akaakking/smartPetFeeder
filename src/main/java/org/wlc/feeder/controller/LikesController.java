@@ -23,12 +23,12 @@ public class LikesController {
     @PostMapping("/blog/like")
     public void like(@RequestBody LikesDTO likesDTO,  @RequestHeader("Authorization") String token) {
         String openId = JwtUtils.validateAndGetOpenId(token);
-        likesDTO.setUserId(Long.valueOf(openId));
+        likesDTO.setUserId(Integer.valueOf(openId));
         likesService.saveLikes(likesDTO);
     }
 
     @GetMapping("/blog/like/count")
-    public ResponseEntity<Long> getLikeCount(@RequestParam Long blogId) {
+    public ResponseEntity<Long> getLikeCount(@RequestParam Integer blogId) {
         return ResponseEntity.ok(likesService.countUserLikes(blogId));
     }
 }

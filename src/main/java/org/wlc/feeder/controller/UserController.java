@@ -47,7 +47,7 @@ public class UserController {
     @PostMapping("/user/info")
     public void addUserInfo(@RequestBody UserDTO userDTO, @RequestHeader("Authorization") String token) {
         String userId = JwtUtils.validateAndGetOpenId(token);
-        userDTO.setId(Long.valueOf(userId));
+        userDTO.setId(Integer.valueOf(userId));
         userService.saveUserInfo(userDTO);
     }
 
@@ -60,18 +60,18 @@ public class UserController {
     @GetMapping("/user/like/blog")
     public ResponseEntity<List<BlogDTO>> getBlog(@RequestHeader("Authorization") String token) {
         String userId = JwtUtils.validateAndGetOpenId(token);
-        return ResponseEntity.ok(blogService.getUserLikeBlog(Long.valueOf(userId)));
+        return ResponseEntity.ok(blogService.getUserLikeBlog(Integer.valueOf(userId)));
     }
 
     @GetMapping("/user/blog")
     public ResponseEntity<List<BlogDTO>> getUserBlog(@RequestHeader("Authorization") String token) {
         String userId = JwtUtils.validateAndGetOpenId(token);
-        return ResponseEntity.ok(blogService.getBlogByUserId(Long.valueOf(userId)));
+        return ResponseEntity.ok(blogService.getBlogByUserId(Integer.valueOf(userId)));
     }
 
     @GetMapping("/user/pet")
     public ResponseEntity<List<PetDTO>> getPet(@RequestHeader("Authorization") String token) {
         String userId = JwtUtils.validateAndGetOpenId(token);
-        return ResponseEntity.ok(petService.getUserPet(Long.valueOf(userId)));
+        return ResponseEntity.ok(petService.getUserPet(Integer.valueOf(userId)));
     }
 }

@@ -21,7 +21,7 @@ public class UrlGenerateService {
         return "http://" + serverIp + ":" + serverPort + "/api/image/" + id;
     }
 
-    public String generateBlogUrl(Long id) {
+    public String generateBlogUrl(Integer id) {
         return "http://" + serverIp + ":" + serverPort + "/api/blog/" + id;
     }
 }

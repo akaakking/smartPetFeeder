@@ -1,5 +1,6 @@
 package org.wlc.feeder.dto;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserDTO {
-    private Long id;
+    @TableId
+    private Integer id;
     private String name;
     private String account;
     private String avatar;

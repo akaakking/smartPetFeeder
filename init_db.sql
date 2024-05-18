@@ -3,8 +3,8 @@ USE smartPetFeeder;
 START TRANSACTION;
 CREATE TABLE blog
 (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id     BIGINT,
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    user_id     INT,
     title VARCHAR(255),
     title_src   VARCHAR(255),
     content   TEXT
@@ -13,7 +13,7 @@ CREATE TABLE blog
 
 CREATE TABLE user
 (
-    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id            INT AUTO_INCREMENT PRIMARY KEY,
     `name`        VARCHAR(255),
     `account`     VARCHAR(255),
     `password`    VARCHAR(255),
@@ -23,20 +23,20 @@ CREATE TABLE user
   CHARSET = utf8;
 create TABLE user_blog_likes
 (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id     BIGINT,
-    blog_id     BIGINT,
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    user_id     INT,
+    blog_id     INT,
     like_status  TINYINT(1)
 ) ENGINE = InnoDB
   CHARSET = utf8;
 CREATE TABLE pet
 (
-    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id       BIGINT,
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    user_id       INT,
     `name`        VARCHAR(255),
     gender        TINYINT(1),
     age           INT,
-    weight        DECIMAL(5, 2),
+    weight        INT,
     birthdate     DATE,
     pet_type      VARCHAR(255),
     avatar        VARCHAR(255),
@@ -50,8 +50,8 @@ CREATE TABLE pet
   CHARSET = utf8;
 CREATE TABLE device
 (
-    id            BIGINT PRIMARY KEY,
-    user_id       BIGINT,
+    id            INT PRIMARY KEY,
+    user_id       INT,
     `name`        VARCHAR(255),
     `description` TEXT,
     `status`      TINYINT(1)

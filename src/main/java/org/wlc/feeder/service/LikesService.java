@@ -36,11 +36,11 @@ public class LikesService {
         likesMapper.updateById(record);
     }
 
-    public List<LikesDTO> getUserLikes(Long userId) {
+    public List<LikesDTO> getUserLikes(Integer userId) {
         return likesMapper.selectList(new QueryWrapper<LikesDTO>().eq("user_id", userId));
     }
 
-    public Long countUserLikes(Long blogId) {
+    public Long countUserLikes(Integer blogId) {
         return likesMapper.selectCount(new QueryWrapper<LikesDTO>().eq("blog_id", blogId).eq("like_status", 1));
     }
 }

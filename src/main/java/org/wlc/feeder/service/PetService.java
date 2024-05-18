@@ -41,11 +41,11 @@ public class PetService {
         petMapper.updateById(petDto);
     }
 
-    public PetDTO getPet(Long id) {
+    public PetDTO getPet(Integer id) {
         return petMapper.selectById(id);
     }
 
-    public List<PetDTO> getUserPet(Long userId) {
+    public List<PetDTO> getUserPet(Integer userId) {
         return petMapper.selectList(new QueryWrapper<PetDTO>().eq("user_id", userId));
     }
 }

@@ -31,7 +31,7 @@ public class BlogService {
     @Resource
     private UploadService uploadService;
 
-    public Long saveBlog(MultipartFile image, BlogDTO blogDTO) throws IOException {
+    public Integer saveBlog(MultipartFile image, BlogDTO blogDTO) throws IOException {
         String imageUrl = uploadService.saveImage(image);
 
         blogDTO.setTitleSrc(imageUrl);
@@ -45,15 +45,15 @@ public class BlogService {
         return blogMapper.selectList(null);
     }
 
-    public BlogDTO getBlogById(Long id) {
+    public BlogDTO getBlogById(Integer id) {
         return blogMapper.selectById(id);
     }
 
-    public List<BlogDTO> getBlogByUserId(Long userId) {
+    public List<BlogDTO> getBlogByUserId(Integer userId) {
         return blogMapper.selectList(new QueryWrapper<BlogDTO>().eq("user_id", userId));
     }
 
-    public List<BlogDTO> getUserLikeBlog(Long userId) {
+    public List<BlogDTO> getUserLikeBlog(Integer userId) {
         List<LikesDTO> userLikes = likesService.getUserLikes(userId);
         if (CollectionUtils.isEmpty(userLikes)) {
             return Collections.emptyList();

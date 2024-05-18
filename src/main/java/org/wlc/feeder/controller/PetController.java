@@ -1,6 +1,7 @@
 package org.wlc.feeder.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.PetDTO;
 import org.wlc.feeder.service.PetService;
@@ -22,14 +23,14 @@ public class PetController {
     private PetService petService;
 
     @PostMapping("/pet")
-    public void savePet(@ModelAttribute PetDTO petDto, @RequestHeader("Authorization") String token) throws IOException {
+    public void savePet(@Validated @ModelAttribute PetDTO petDto, @RequestHeader("Authorization") String token) throws IOException {
         String openId = JwtUtils.validateAndGetOpenId(token);
-        petDto.setUserId(Long.valueOf(openId));
+        petDto.setUserId(Integer.valueOf(openId));
         petService.savePet(petDto);
     }
 
     @GetMapping("/pet")
-    public ResponseEntity<PetDTO> getPet(@RequestParam("id") Long id) {
+    public ResponseEntity<PetDTO> getPet(@RequestParam("id") Integer id) {
         return ResponseEntity.ok(petService.getPet(id));
     }
 }

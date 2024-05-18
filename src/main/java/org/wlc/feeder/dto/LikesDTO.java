@@ -1,5 +1,6 @@
 package org.wlc.feeder.dto;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -12,9 +13,10 @@ import lombok.Data;
 @TableName("user_blog_likes")
 @Data
 public class LikesDTO {
-    private Long id;
-    private Long userId;
-    private Long blogId;
+    @TableId
+    private Integer id;
+    private Integer userId;
+    private Integer blogId;
     private Integer likeStatus;
 }
 
