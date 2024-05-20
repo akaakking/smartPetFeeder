@@ -18,6 +18,12 @@ public class FeedPlan {
     private String duration;
 
     public String toString() {
-        return GsonSingleton.getInstance().toJson(this);
+        StringBuilder sb = new StringBuilder();
+        sb.append(breakfast)
+                .append(",")
+                .append(lunch)
+                .append(",")
+                .append(dinner);
+        return sb.toString();
     }
 }

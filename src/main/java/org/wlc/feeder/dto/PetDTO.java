@@ -25,9 +25,6 @@ public class PetDTO {
     private Integer id;
     private Integer userId;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private String name;
     private Boolean gender;
     private Integer age;
@@ -41,6 +38,7 @@ public class PetDTO {
     private String dinner;
     private String deviceId;
     @TableField(exist = false)
-    @NotNull
+    private String type;
+    @TableField(exist = false)
     private MultipartFile avatarFile;
 }

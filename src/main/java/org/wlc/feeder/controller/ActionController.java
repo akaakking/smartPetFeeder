@@ -1,5 +1,7 @@
 package org.wlc.feeder.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.FeedPlan;
@@ -18,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api")
 public class ActionController {
 
+    private static final Logger log = LoggerFactory.getLogger(ActionController.class);
     @Resource
     private ActionService actionService;
 
@@ -38,7 +41,7 @@ public class ActionController {
         actionService.feed(deviceId, status);
     }
 
-    @GetMapping("/action/feedPlan")
+    @PostMapping("/action/feedPlan")
     public void feedPlan(@RequestBody FeedPlan feedPlan) {
         actionService.feedPlan(feedPlan);
     }

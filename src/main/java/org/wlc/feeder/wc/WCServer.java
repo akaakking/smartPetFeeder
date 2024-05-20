@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.wlc.feeder.constant.GsonSingleton;
 import org.wlc.feeder.exception.BizException;
 import org.wlc.feeder.service.DeviceService;
+import org.wlc.feeder.util.AppContextUtil;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -29,23 +30,29 @@ import java.util.concurrent.ExecutionException;
 public class WCServer {
     private static final BiMap<String, Session> clientMap = HashBiMap.create();
 
-    private static final BiMap<String, CompletableFuture> FUTURES = HashBiMap.create();
+    private static final BiMap<String, CompletableFuture<Message>> FUTURES = HashBiMap.create();
 
     @Resource
     private DeviceService deviceService;
 
     @OnClose
     public void onClose(Session session) throws IOException {
-        System.out.println("one connection closed");
+        log.info("device {} 下线", clientMap.inverse().get(session));
+        clientMap.inverse().remove(session);
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
+        log.error(throwable.toString());
         throwable.printStackTrace();
     }
 
     @OnMessage
     public void onMessage(Session session, String message) {
+        if (deviceService == null) {
+            deviceService = AppContextUtil.getBean(DeviceService.class);
+        }
+
         log.info(message);
         Message msg = GsonSingleton.getInstance().fromJson(message, Message.class);
 
@@ -60,6 +67,10 @@ public class WCServer {
                 case "food_detect_silo":
                     dealFoodDetectSilo(session, msg);
                     break;
+                case "food_warn":
+//                    dealFoodWarn(msg);
+                case "feed":
+                    // todo 定时喂食的回调
                 default:
                     break;
             }
@@ -67,6 +78,13 @@ public class WCServer {
             log.error("onMessage error", e);
         }
     }
+
+//    // todo @Resource 有可能没有起作用
+//    public void dealFoodWarn(Session session) {
+//        String deviceId = clientMap.inverse().get(session);
+//        Integer deviceOwner = deviceService.findDeviceOwner(Integer.valueOf(deviceId));
+//
+//    }
 
     public void dealFoodDetectSilo(Session session, Message msg) throws ExecutionException, InterruptedException {
         String deviceId = clientMap.inverse().get(session);
@@ -81,7 +99,7 @@ public class WCServer {
 
         CompletableFuture completableFuture = FUTURES.get(deviceId);
 
-        completableFuture.complete(msg.getContent());
+        completableFuture.complete(msg);
     }
 
     public void dealConnect(Session session, String deviceId) throws BizException {
@@ -90,13 +108,15 @@ public class WCServer {
             log.error("该设备已连接 {}", deviceId);
         }
 
-        if (!deviceService.deviceExist(deviceId)) {
-            sendMsg(session, "connect", "该设备不存在");
-            log.error("device {} 不存在", deviceId);
-        }
+//        if (!deviceService.deviceExist(deviceId)) {
+//            sendMsg(session, "connect", "该设备不存在");
+//            log.error("device {} 不存在", deviceId);
+//        }
 
         sendMsg(session, "connect", "连接成功");
-        clientMap.put(deviceId, session);
+        synchronized (clientMap) {
+            clientMap.put(deviceId, session);
+        }
     }
 
     private void sendMsg(Session session, String cmd, String content) {

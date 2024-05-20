@@ -1,9 +1,11 @@
 package org.wlc.feeder.controller;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.PetDTO;
+import org.wlc.feeder.exception.BizException;
 import org.wlc.feeder.service.PetService;
 import org.wlc.feeder.util.JwtUtils;
 
@@ -23,10 +25,20 @@ public class PetController {
     private PetService petService;
 
     @PostMapping("/pet")
-    public void savePet(@Validated @ModelAttribute PetDTO petDto, @RequestHeader("Authorization") String token) throws IOException {
+    public ResponseEntity<String> savePet(@Validated @ModelAttribute PetDTO petDto, @RequestHeader("Authorization") String token) throws IOException, BizException {
+        if (Strings.isBlank(petDto.getName())) {
+            throw new BizException("name is blank");
+        }
+
+        if (!"edit".equals(petDto.getPetType()) && petDto.getAvatarFile() == null) {
+            throw new BizException("avatarFile is null");
+        }
+
         String openId = JwtUtils.validateAndGetOpenId(token);
         petDto.setUserId(Integer.valueOf(openId));
         petService.savePet(petDto);
+
+        return ResponseEntity.ok("success");
     }
 
     @GetMapping("/pet")

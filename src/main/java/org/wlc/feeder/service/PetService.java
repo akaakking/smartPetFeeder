@@ -28,9 +28,11 @@ public class PetService {
 
     public void savePet(PetDTO petDto) throws IOException {
 
-        petDto.setAvatar(
-                uploadService.saveImage(petDto.getAvatarFile())
-        );
+        if (petDto.getAvatarFile() != null) {
+            petDto.setAvatar(
+                    uploadService.saveImage(petDto.getAvatarFile())
+            );
+        }
 
         petDto.setAvatarFile(null);
 

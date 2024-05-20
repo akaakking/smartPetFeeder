@@ -19,4 +19,8 @@ public class DeviceService {
     public Boolean deviceExist(String deviceId) {
         return deviceMapper.selectById(deviceId) == null;
     }
+
+    public Integer findDeviceOwner(Integer deviceId) {
+        return deviceMapper.selectById(deviceId).getUserId();
+    }
 }

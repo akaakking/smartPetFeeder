@@ -1,4 +1,6 @@
 import org.junit.jupiter.api.Test;
+import org.wlc.feeder.constant.GsonSingleton;
+import org.wlc.feeder.dto.FeedPlan;
 import org.wlc.feeder.util.JwtUtils;
 
 /**
@@ -12,6 +14,16 @@ public class JwtUtilsTest {
     public void testGenerateToken() {
         String token = JwtUtils.generateToken("1788216102432444417");
         System.out.println(token);
+    }
+
+    @Test
+    public void dfsd() {
+        FeedPlan feedPlan = new FeedPlan();
+        feedPlan.setBreakfast("16:38");
+        feedPlan.setLunch("18:00");
+        feedPlan.setDinner("19:00");
+        System.out.println(GsonSingleton.getInstance().toJson(feedPlan));
+
     }
 
     @Test
