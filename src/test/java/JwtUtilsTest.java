@@ -12,7 +12,7 @@ import org.wlc.feeder.util.JwtUtils;
 public class JwtUtilsTest {
     @Test
     public void testGenerateToken() {
-        String token = JwtUtils.generateToken("1788216102432444417");
+        String token = JwtUtils.generateToken("1444417");
         System.out.println(token);
     }
 

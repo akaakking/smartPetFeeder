@@ -17,8 +17,8 @@ public class DeviceService {
     @Resource
     private DeviceMapper deviceMapper;
 
-    public Boolean deviceExist(String deviceId) {
-        return deviceMapper.selectById(deviceId) == null;
+    public Boolean deviceExist(Integer deviceId) {
+        return deviceMapper.selectById(deviceId) != null;
     }
 
     public Integer findDeviceOwner(Integer deviceId) {

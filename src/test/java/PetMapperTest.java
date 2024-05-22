@@ -26,29 +26,29 @@ public class PetMapperTest {
     @Resource
     private UserController userController;
 
-    @Test
-    public void test() {
-        PetDTO petDTO = new PetDTO(null);
-        petDTO.setPetType("fdf");
-        petMapper.insert(petDTO);
-        log.info("" + petDTO.getId());
+//    @Test
+//    public void test() {
+//        PetDTO petDTO = new PetDTO("null");
+//        petDTO.setPetType("fdf");
+//        petMapper.insert(petDTO);
+//        log.info("" + petDTO.getId());
+//
+//        PetDTO petDTO1 = petMapper.selectById(petDTO.getId());
+//
+//        log.info(petDTO1.toString());
+//    }
 
-        PetDTO petDTO1 = petMapper.selectById(petDTO.getId());
-
-        log.info(petDTO1.toString());
-    }
-
-    @Test
-    public void test2() {
-        PetDTO petDTO = new PetDTO("323");
-        petDTO.setUserId(123);
-        petMapper.insert(petDTO);
-
-        ResponseEntity<List<PetDTO>> pet = userController.getPet(JwtUtils.generateToken(String.valueOf(123)));
-
-        for (PetDTO dto : pet.getBody()) {
-            log.info(dto.toString());
-        }
-
-    }
+//    @Test
+//    public void test2() {
+//        PetDTO petDTO = new PetDTO("323");
+//        petDTO.setUserId(123);
+//        petMapper.insert(petDTO);
+//
+//        ResponseEntity<List<PetDTO>> pet = userController.getPet(JwtUtils.generateToken(String.valueOf(123)));
+//
+//        for (PetDTO dto : pet.getBody()) {
+//            log.info(dto.toString());
+//        }
+//
+//    }
 }

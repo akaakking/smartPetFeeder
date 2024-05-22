@@ -1,5 +1,6 @@
 package org.wlc.feeder.exception;
 
+import lombok.Data;
 import org.wlc.feeder.enums.BizExceptionCodeEnum;
 
 /**
@@ -9,20 +10,19 @@ import org.wlc.feeder.enums.BizExceptionCodeEnum;
  * @Date 2024/4/21 上午10:44
  */
 public class BizException extends Exception {
-    String msg;
     Integer code;
 
     public BizException(String msg, Integer code) {
-        this.msg = msg;
+        super(msg);
         this.code = code;
     }
 
     public BizException(String msg) {
-        this.msg = msg;
+        super(msg);
     }
 
     public BizException(BizExceptionCodeEnum bizExceptionCodeEnum) {
-        this.msg = bizExceptionCodeEnum.getMsg();
+        super(bizExceptionCodeEnum.getMsg());
         this.code = bizExceptionCodeEnum.getCode();
     }
 }

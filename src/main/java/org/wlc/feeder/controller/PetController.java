@@ -1,8 +1,11 @@
 package org.wlc.feeder.controller;
 
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wlc.feeder.dto.PetDTO;
+import org.wlc.feeder.dto.PetModifyDTO;
 import org.wlc.feeder.exception.BizException;
 import org.wlc.feeder.service.DeviceService;
 import org.wlc.feeder.service.PetService;
@@ -10,7 +13,6 @@ import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * //TODO add class commment here
@@ -29,16 +31,20 @@ public class PetController {
 
     @PostMapping("/pet")
     public ResponseEntity<String> savePet(@ModelAttribute PetDTO petDto, @RequestHeader("Authorization") String token) throws IOException, BizException {
-        // 如果是edit 则图片允许为null否则不允许
-        if (petDto.getAvatarFile() == null && petDto.getId() == null) {
-            throw new BizException("avatarFile is null");
+        if (Strings.isBlank(petDto.getName())) {
+            throw new BizException("姓名为必填字段");
         }
 
-        // 检验device是否存在
-        if (!Objects.isNull(petDto.getDeviceId())) {
-            if (!deviceService.deviceExist(petDto.getDeviceId())) {
-                throw new BizException("device not exist");
-            }
+        if (petDto.getDeviceId() == null) {
+            throw new BizException("机器标识未填写");
+        }
+
+        if (!deviceService.deviceExist(petDto.getDeviceId())) {
+            throw new BizException("机器标识不存在");
+        }
+
+        if (petService.deviceHasUsed(petDto.getDeviceId(), petDto.getId())) {
+            throw new BizException("机器标识已经被使用");
         }
 
         String openId = JwtUtils.validateAndGetOpenId(token);
@@ -47,6 +53,36 @@ public class PetController {
 
         return ResponseEntity.ok("success");
     }
+
+    @PostMapping("/pet/modify")
+    public ResponseEntity<String> modifyPet(@ModelAttribute PetModifyDTO petModifyDTO, @RequestHeader("Authorization") String token) throws BizException, IOException {
+        // 检验device是否存在, 还需要检查，是否是一个宠物一个device
+        if (Strings.isBlank(petModifyDTO.getName())) {
+            throw new BizException("姓名为必填字段");
+        }
+
+        if (petModifyDTO.getDeviceId() == null) {
+            throw new BizException("机器标识未填写");
+        }
+
+        if (!deviceService.deviceExist(petModifyDTO.getDeviceId())) {
+            throw new BizException("机器标识不存在");
+        }
+
+        if (petService.deviceHasUsed(petModifyDTO.getDeviceId(), petModifyDTO.getId())) {
+            throw new BizException("该机器已经被使用");
+        }
+
+        String openId = JwtUtils.validateAndGetOpenId(token);
+        petModifyDTO.setUserId(Integer.valueOf(openId));
+
+        PetDTO petDTO = new PetDTO();
+        BeanUtils.copyProperties(petModifyDTO, petDTO);
+        petService.savePet(petDTO);
+
+        return ResponseEntity.ok("success");
+    }
+
 
     @GetMapping("/pet")
     public ResponseEntity<PetDTO> getPet(@RequestParam("id") Integer id) {

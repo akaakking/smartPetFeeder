@@ -27,7 +27,12 @@ public class WechatService {
     @Value("${wechat.appSecret}")
     private String appSecret;
 
+    @Value("${wechat.templateId}")
+    private String templateId;
+
     private String GET_WECHAT_SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+
+//    private String GET_WECHAT_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
     LoadingCache<String, WechatSession> WECHAT_SESSION_CACHE = CacheBuilder.newBuilder()
             .maximumSize(100)
@@ -60,5 +65,13 @@ public class WechatService {
 
     public WechatSession getWechatSession(String code) throws ExecutionException {
         return WECHAT_SESSION_CACHE.get(code);
+    }
+
+//    public String getAccessToken() {
+//
+//    }
+
+
+    public void sendWechatMessage(String openId, String message, String accessToken) {
     }
 }

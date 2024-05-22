@@ -2,9 +2,7 @@ package org.wlc.feeder.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Nonnull;
@@ -14,12 +12,10 @@ import javax.annotation.Nullable;
  * //TODO add class commment here
  *
  * @Author wfh
- * @Date 2024/3/27 下午9:50
+ * @Date 2024/5/22 下午5:15
  */
-@TableName("pet")
 @Data
-@ToString // todo 头像昵称必填
-public class PetDTO {
+public class PetModifyDTO {
     @TableId
     private Integer id;
     private Integer userId;
@@ -36,7 +32,4 @@ public class PetDTO {
     private String lunch;
     private String dinner;
     private Integer deviceId;
-    @TableField(exist = false)
-    @Nullable
-    private MultipartFile avatarFile;
 }
