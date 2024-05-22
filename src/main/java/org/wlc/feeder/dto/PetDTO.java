@@ -3,13 +3,12 @@ package org.wlc.feeder.dto;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * //TODO add class commment here
@@ -25,6 +24,7 @@ public class PetDTO {
     private Integer id;
     private Integer userId;
 
+    @Nonnull
     private String name;
     private Boolean gender;
     private Integer age;
@@ -40,5 +40,6 @@ public class PetDTO {
     @TableField(exist = false)
     private String type;
     @TableField(exist = false)
+    @Nullable
     private MultipartFile avatarFile;
 }

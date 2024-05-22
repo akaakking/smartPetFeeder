@@ -14,8 +14,10 @@ import org.wlc.feeder.util.AppContextUtil;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  * //TODO add class commment here
@@ -34,6 +36,8 @@ public class WCServer {
 
     @Resource
     private DeviceService deviceService;
+
+
 
     @OnClose
     public void onClose(Session session) throws IOException {
@@ -149,5 +153,10 @@ public class WCServer {
             log.error("发送消息时出错",e);
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getOnlineDevice() {
+        log.info("online device {}", clientMap.keySet());
+        return clientMap.keySet().stream().collect(Collectors.joining(","));
     }
 }

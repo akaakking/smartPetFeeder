@@ -2,6 +2,7 @@ package org.wlc.feeder.service;
 
 import org.springframework.stereotype.Service;
 import org.wlc.feeder.dao.DeviceMapper;
+import org.wlc.feeder.dto.DeviceDTO;
 
 import javax.annotation.Resource;
 
@@ -22,5 +23,11 @@ public class DeviceService {
 
     public Integer findDeviceOwner(Integer deviceId) {
         return deviceMapper.selectById(deviceId).getUserId();
+    }
+
+    public void saveDevice(Integer deviceId) {
+        DeviceDTO deviceDTO = new DeviceDTO();
+        deviceDTO.setId(deviceId);
+        deviceMapper.insert(deviceDTO);
     }
 }
