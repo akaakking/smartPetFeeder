@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 import org.wlc.feeder.constant.GsonSingleton;
 import org.wlc.feeder.dto.FeedPlan;
+import org.wlc.feeder.dto.wechat.SendSubscribeMessageDTO;
 import org.wlc.feeder.util.JwtUtils;
 
 /**
@@ -30,5 +31,10 @@ public class JwtUtilsTest {
     public void testValidateAndGetOpenId() {
         String token = JwtUtils.generateToken("123");
         System.out.println(JwtUtils.validateAndGetOpenId(token));
+    }
+
+    @Test
+    public void JsonTs() {
+        System.out.println(SendSubscribeMessageDTO.buildJson("123", "123", new SendSubscribeMessageDTO.PlaceHolder("ty","1234"), new SendSubscribeMessageDTO.PlaceHolder("thing", "123")));
     }
 }

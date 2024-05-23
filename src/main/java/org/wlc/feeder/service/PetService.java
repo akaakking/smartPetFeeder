@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.wlc.feeder.dao.PetMapper;
 import org.wlc.feeder.dto.BlogDTO;
+import org.wlc.feeder.dto.FeedPlan;
 import org.wlc.feeder.dto.LikesDTO;
 import org.wlc.feeder.dto.PetDTO;
 
@@ -28,7 +29,19 @@ public class PetService {
     @Resource
     private UploadService uploadService;
 
+    @Resource
+    private ActionService actionService;
+
     public void savePet(PetDTO petDto) throws IOException {
+        FeedPlan feedPlan = new FeedPlan();
+        feedPlan.setDeviceId(String.valueOf(petDto.getDeviceId()));
+        feedPlan.setBreakfast(petDto.getBreakfast());
+        feedPlan.setLunch(petDto.getLunch());
+        feedPlan.setDinner(petDto.getDinner());
+        feedPlan.setDuration("15");
+        // todo feedplan待定
+        actionService.feedPlan(feedPlan);
+
         if (petDto.getAvatarFile() != null) {
             petDto.setAvatar(
                     uploadService.saveImage(petDto.getAvatarFile())

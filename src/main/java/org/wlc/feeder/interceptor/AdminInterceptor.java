@@ -27,7 +27,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (method.isAnnotationPresent(AdminAuth.class) && !request.getRemoteHost().equals("127.0.0.1")) {
             log.info("ip want {} visit adminApi", request.getRemoteHost());
             response.setStatus(401);
-            response.getWriter().write("你没有访问管理端接口的权限 ～……～");
+            response.getWriter().write("no auth for adminApi");
             return false;
         }
         return true;

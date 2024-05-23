@@ -1,5 +1,7 @@
 package org.wlc.feeder.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class BlogController {
+    private static final Logger log = LoggerFactory.getLogger(BlogController.class);
     @Resource
     private UrlGenerateService urlGenerateService;
 
@@ -31,6 +34,8 @@ public class BlogController {
     public ResponseEntity<String> saveBlog(@RequestParam("image") MultipartFile image,
                                            @RequestParam("title") String title,
                                            @RequestParam("content") String content, @RequestHeader("Authorization") String token) throws IOException {
+        log.info(title);
+        log.info(content);
         String userId = JwtUtils.validateAndGetOpenId(token);
         BlogDTO blogDTO = new BlogDTO(null,Integer.valueOf(userId),title,null,content);
         String url = urlGenerateService.generateBlogUrl(blogService.saveBlog(image, blogDTO));

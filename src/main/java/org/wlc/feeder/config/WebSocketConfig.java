@@ -12,13 +12,13 @@ import org.wlc.feeder.wc.WCServer;
  * @Author wfh
  * @Date 2024/5/18 下午3:12
  */
-//@Configuration
-//@EnableWebSocket
+@Configuration
+@EnableWebSocket
 public class WebSocketConfig {
-//    @Bean
-//    public ServerEndpointExporter serverEndpointExporter() {
-//        ServerEndpointExporter serverEndpointExporter = new ServerEndpointExporter();
-//        serverEndpointExporter.setAnnotatedEndpointClasses(WCServer.class);
-//        return serverEndpointExporter;
-//    }
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        ServerEndpointExporter serverEndpointExporter = new ServerEndpointExporter();
+        serverEndpointExporter.setAnnotatedEndpointClasses(WCServer.class);
+        return serverEndpointExporter;
+    }
 }

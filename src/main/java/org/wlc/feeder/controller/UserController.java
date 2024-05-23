@@ -58,7 +58,7 @@ public class UserController {
     @GetMapping("/user/info")
     public ResponseEntity<UserDTO> getUserInfo(@RequestHeader("Authorization") String token) {
         String openId = JwtUtils.validateAndGetOpenId(token);
-        return ResponseEntity.ok(userService.getUserInfo(openId));
+        return ResponseEntity.ok(userService.getUserInfo(Integer.valueOf(openId)));
     }
 
     @GetMapping("/user/like/blog")

@@ -13,6 +13,7 @@ import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * //TODO add class commment here
@@ -45,6 +46,10 @@ public class PetController {
 
         if (petService.deviceHasUsed(petDto.getDeviceId(), petDto.getId())) {
             throw new BizException("机器标识已经被使用");
+        }
+
+        if (Strings.isBlank(petDto.getBreakfast()) || Strings.isBlank(petDto.getLunch()) || Strings.isBlank(petDto.getDinner())) {
+            throw new BizException("三餐时间未填写");
         }
 
         String openId = JwtUtils.validateAndGetOpenId(token);

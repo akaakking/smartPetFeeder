@@ -5,11 +5,16 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wlc.feeder.constant.GsonSingleton;
+import org.wlc.feeder.dto.wechat.GetAccessTokenResult;
+import org.wlc.feeder.dto.wechat.SendSubscribeMessageDTO;
 import org.wlc.feeder.dto.wechat.WechatSession;
 import org.wlc.feeder.util.HttpUtil;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -30,9 +35,13 @@ public class WechatService {
     @Value("${wechat.templateId}")
     private String templateId;
 
-    private String GET_WECHAT_SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+    private volatile String accessToken;
 
-//    private String GET_WECHAT_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+    public static String GET_WECHAT_SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+
+    public static String GET_WECHAT_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+
+    public static String SEND_SUBSCRIBE_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=%s";
 
     LoadingCache<String, WechatSession> WECHAT_SESSION_CACHE = CacheBuilder.newBuilder()
             .maximumSize(100)
@@ -67,11 +76,33 @@ public class WechatService {
         return WECHAT_SESSION_CACHE.get(code);
     }
 
-//    public String getAccessToken() {
-//
-//    }
+//     使用Cron表达式定义刷新频率，这个例子中每小时刷新一次
+    @Scheduled(cron = "0 0 * * * ?")
+    public void refresh() {
+        // 实现你的刷新逻辑
+        try {
+            accessToken = fetchNewAccessToken();
+        } catch (Exception e) {
+            log.error("刷新token失败",e);
+        }
+    }
 
+    public String fetchNewAccessToken() throws URISyntaxException, IOException {
+        String url = String.format(GET_WECHAT_ACCESS_TOKEN_URL, appId, appSecret);
+        String httpResult = HttpUtil.get(url);
+        log.info("get accessToken response {}", httpResult);
 
-    public void sendWechatMessage(String openId, String message, String accessToken) {
+        return GsonSingleton.getInstance().fromJson(httpResult, GetAccessTokenResult.class).getAccess_token();
+    }
+
+    // 两种订阅消息 1. 提醒用户喂食成功/失败 2. 提醒用户粮食没有了
+    public void sendWechatMessage(String message) {
+        String url = String.format(SEND_SUBSCRIBE_MESSAGE_URL, accessToken);
+
+        try {
+            HttpUtil.post(url, message);
+        } catch (Exception e) {
+            log.error("sendWechatMessage error: {}", e.getMessage(),e);
+        }
     }
 }

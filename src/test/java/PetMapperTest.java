@@ -26,17 +26,17 @@ public class PetMapperTest {
     @Resource
     private UserController userController;
 
-//    @Test
-//    public void test() {
-//        PetDTO petDTO = new PetDTO("null");
-//        petDTO.setPetType("fdf");
-//        petMapper.insert(petDTO);
-//        log.info("" + petDTO.getId());
-//
-//        PetDTO petDTO1 = petMapper.selectById(petDTO.getId());
-//
-//        log.info(petDTO1.toString());
-//    }
+    @Test
+    public void test() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setPetType("fdf");
+        petMapper.insert(petDTO);
+        log.info("" + petDTO.getId());
+
+        PetDTO petDTO1 = petMapper.selectById(petDTO.getId());
+
+        log.info(petDTO1.toString());
+    }
 
 //    @Test
 //    public void test2() {

@@ -15,7 +15,7 @@ import org.wlc.feeder.constant.GsonSingleton;
 @AllArgsConstructor
 public class Message {
     private String cmd;
-    private String content;
+    private Object content;
 
     public String toString() {
         return GsonSingleton.getInstance().toJson(this);
