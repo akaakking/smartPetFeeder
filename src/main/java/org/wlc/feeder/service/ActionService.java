@@ -1,5 +1,6 @@
 package org.wlc.feeder.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.wlc.feeder.dto.FeedPlan;
 import org.wlc.feeder.wc.Message;
@@ -23,6 +24,9 @@ import java.util.concurrent.ExecutionException;
 public class ActionService {
     @Resource
     private WCServer wcServer;
+
+    @Value("${feeder.server.ip}")
+    private String serverIp;
 
     public String detectFoodBowl(String deviceId) throws ExecutionException, InterruptedException {
         CompletableFuture<Message> food_detect_bowl = wcServer.sendMsg(deviceId, new Message("food_detect_bowl", null));
@@ -53,8 +57,18 @@ public class ActionService {
         wcServer.sendMsgNoReturn(deviceId,new Message("camera_move", direction * 15 + ""));
     }
 
-    public String cameraRegular(String deviceId) {
-        return null;
+    public String cameraRegular(String deviceId, Boolean status) throws InterruptedException {
+        int switc = status ? 1 : 0;
+        wcServer.sendMsgNoReturn(deviceId, new Message("camera_regular", switc));
+        Thread.sleep(500);
+        return "rtmp://"  + serverIp + ":1935/live/" + deviceId;
     }
 
+
+    public String cameraDetect(String deviceId, Boolean status) throws InterruptedException {
+        int switc = status ? 1 : 0;
+        wcServer.sendMsgNoReturn(deviceId, new Message("camera_regular", switc));
+        Thread.sleep(500);
+        return "rtmp://"  + serverIp + ":1935/live/" + deviceId;
+    }
 }

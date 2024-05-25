@@ -1,12 +1,6 @@
 package org.wlc.feeder.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * //TODO add class commment here
@@ -16,7 +10,6 @@ import javax.annotation.Nullable;
  */
 @Data
 public class PetModifyDTO {
-    @TableId
     private Integer id;
     private Integer userId;
 

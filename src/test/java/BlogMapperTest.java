@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * @Author wfh
  * @Date 2024/5/23 上午11:25
  */
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BlogMapperTest {
     @Resource
     private BlogMapper blogMapper;

@@ -23,6 +23,10 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/user/login/**").excludePathPatterns("/api/image/**").excludePathPatterns("/api/admin/**");
+                .excludePathPatterns("/api/user/login/**")
+                .excludePathPatterns("/api/image/**")
+                .excludePathPatterns("/api/blog/all")
+                .excludePathPatterns("/api/blog/detail")
+                .excludePathPatterns("/api/admin/**");
     }
 }

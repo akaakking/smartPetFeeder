@@ -48,8 +48,8 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getAll());
     }
 
-    @GetMapping("/blog/{id}")
-    public ResponseEntity<BlogDTO> getBlog(@PathVariable("id") Integer id) {
+    @GetMapping("/blog/detail")
+    public ResponseEntity<BlogDTO> getBlog(@RequestParam("id") Integer id) {
         return ResponseEntity.ok(blogService.getBlogById(id));
     }
 }

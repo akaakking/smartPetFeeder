@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wlc.feeder.constant.GsonSingleton;
 import org.wlc.feeder.dto.wechat.GetAccessTokenResult;
-import org.wlc.feeder.dto.wechat.SendSubscribeMessageDTO;
 import org.wlc.feeder.dto.wechat.WechatSession;
 import org.wlc.feeder.util.HttpUtil;
 
@@ -32,8 +31,11 @@ public class WechatService {
     @Value("${wechat.appSecret}")
     private String appSecret;
 
-    @Value("${wechat.templateId}")
-    private String templateId;
+    @Value("${wechat.petFeedingReminderTemplate}")
+    private String petFeedingReminderTemplate;
+
+    @Value("${wechat.foodShortageReminderTemplate}")
+    private String foodShortageReminderTemplate;
 
     private volatile String accessToken;
 
@@ -81,7 +83,9 @@ public class WechatService {
     public void refresh() {
         // 实现你的刷新逻辑
         try {
+            log.info("开始刷新token");
             accessToken = fetchNewAccessToken();
+            log.info("刷新token成功 {}", accessToken);
         } catch (Exception e) {
             log.error("刷新token失败",e);
         }
@@ -97,6 +101,7 @@ public class WechatService {
 
     // 两种订阅消息 1. 提醒用户喂食成功/失败 2. 提醒用户粮食没有了
     public void sendWechatMessage(String message) {
+        log.info("sendWechatMessage accessToken {}", accessToken);
         String url = String.format(SEND_SUBSCRIBE_MESSAGE_URL, accessToken);
 
         try {
@@ -104,5 +109,13 @@ public class WechatService {
         } catch (Exception e) {
             log.error("sendWechatMessage error: {}", e.getMessage(),e);
         }
+    }
+
+    public String getPetFeedingReminderTemplate() {
+        return petFeedingReminderTemplate;
+    }
+
+    public String getFoodShortageReminderTemplate() {
+        return foodShortageReminderTemplate;
     }
 }

@@ -1,9 +1,12 @@
 package org.wlc.feeder.controller;
 
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.wlc.feeder.constant.GsonSingleton;
 import org.wlc.feeder.dto.PetDTO;
 import org.wlc.feeder.dto.PetModifyDTO;
 import org.wlc.feeder.exception.BizException;
@@ -13,7 +16,6 @@ import org.wlc.feeder.util.JwtUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * //TODO add class commment here
@@ -24,6 +26,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api")
 public class PetController {
+    private static final Logger log = LoggerFactory.getLogger(PetController.class);
     @Resource
     private PetService petService;
 
@@ -61,6 +64,8 @@ public class PetController {
 
     @PostMapping("/pet/modify")
     public ResponseEntity<String> modifyPet(@ModelAttribute PetModifyDTO petModifyDTO, @RequestHeader("Authorization") String token) throws BizException, IOException {
+        log.info("modify pet: {}", GsonSingleton.getInstance().toJson(petModifyDTO));
+
         // 检验device是否存在, 还需要检查，是否是一个宠物一个device
         if (Strings.isBlank(petModifyDTO.getName())) {
             throw new BizException("姓名为必填字段");

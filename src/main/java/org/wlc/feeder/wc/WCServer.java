@@ -5,16 +5,17 @@ import com.google.common.collect.HashBiMap;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.wlc.feeder.constant.GsonSingleton;
 import org.wlc.feeder.dto.wechat.SendSubscribeMessageDTO;
 import org.wlc.feeder.exception.BizException;
 import org.wlc.feeder.service.DeviceService;
+import org.wlc.feeder.service.PetService;
 import org.wlc.feeder.service.UserService;
 import org.wlc.feeder.service.WechatService;
 import org.wlc.feeder.util.AppContextUtil;
+import org.wlc.feeder.util.CommonUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -37,14 +38,13 @@ public class WCServer {
 
     private static final BiMap<String, CompletableFuture<Message>> FUTURES = HashBiMap.create();
 
-    @Resource
     private DeviceService deviceService;
 
-    @Resource
     private UserService userService;
 
-    @Resource
     private WechatService wechatService;
+
+    private PetService petService;
 
     @OnClose
     public void onClose(Session session) throws IOException {
@@ -64,6 +64,7 @@ public class WCServer {
             deviceService = AppContextUtil.getBean(DeviceService.class);
             userService = AppContextUtil.getBean(UserService.class);
             wechatService = AppContextUtil.getBean(WechatService.class);
+            petService = AppContextUtil.getBean(PetService.class);
         }
 
         log.info("收到消息：{}", message);
@@ -72,7 +73,7 @@ public class WCServer {
         try {
             switch (msg.getCmd()) {
                 case "connect":
-                    dealConnect(session, msg.getContent());
+                    dealConnect(session, (String) msg.getContent());
                     break;
                 case "food_detect_bowl":
                     dealFoodDetectBowl(session, msg);
@@ -82,9 +83,15 @@ public class WCServer {
                     break;
                 case "regular_test_bowl":
                     log.info("余量不足，需要提醒用户");
+                    regular_test_bowl(session);
                     break;
                 case "regular_test_silo":
                     log.info("余量不足，需要提醒用户");
+                    regular_test_silo(session);
+                    break;
+                case "feed_complete":
+                    log.info("已经完成投喂");
+                    feedComplete(session);
                     break;
                 default:
                     break;
@@ -94,28 +101,39 @@ public class WCServer {
         }
     }
 
+    private void feedComplete(Session session) {
+        String deviceId = clientMap.inverse().get(session);
+        Integer deviceOwner = deviceService.findDeviceOwner(Integer.valueOf(deviceId));
+        String wechatId = userService.getUserInfo(deviceOwner).getWechatId();
+        String petName = petService.findPetByDeviceId(deviceId).getName();
+
+        wechatService.sendWechatMessage(SendSubscribeMessageDTO.buildJson(wechatId, wechatService.getPetFeedingReminderTemplate(),
+                new SendSubscribeMessageDTO.PlaceHolder("name1", petName),
+                new SendSubscribeMessageDTO.PlaceHolder("phrase2", "宠物定时喂食"),
+                new SendSubscribeMessageDTO.PlaceHolder("date3", CommonUtils.getyyyymmddHHmmss()),
+                new SendSubscribeMessageDTO.PlaceHolder("thing5", "已完成宠物食物的定点投送")));
+    }
+
     private void regular_test_bowl(Session session) {
         String deviceId = clientMap.inverse().get(session);
         Integer deviceOwner = deviceService.findDeviceOwner(Integer.valueOf(deviceId));
         String wechatId = userService.getUserInfo(deviceOwner).getWechatId();
 
 
-        wechatService.sendWechatMessage(SendSubscribeMessageDTO.buildJson(wechatId, "wechat_food_warn_template",
-                new SendSubscribeMessageDTO.PlaceHolder("", ""),
-                new SendSubscribeMessageDTO.PlaceHolder("", "")));
+        wechatService.sendWechatMessage(SendSubscribeMessageDTO.buildJson(wechatId, wechatService.getFoodShortageReminderTemplate(),
+                new SendSubscribeMessageDTO.PlaceHolder("thing1", "宠物已经完成进食"),
+                new SendSubscribeMessageDTO.PlaceHolder("time3", CommonUtils.getyyyymmddHHmmss())));
     }
 
-    private void regular_test_silo() {
-    }
-
-    public void dealFoodWarn(Session session) {
+    private void regular_test_silo(Session session) {
         String deviceId = clientMap.inverse().get(session);
         Integer deviceOwner = deviceService.findDeviceOwner(Integer.valueOf(deviceId));
         String wechatId = userService.getUserInfo(deviceOwner).getWechatId();
 
-        wechatService.sendWechatMessage(SendSubscribeMessageDTO.buildJson(wechatId, "wechat_food_warn_template",
-                new SendSubscribeMessageDTO.PlaceHolder("thing7", "宠物粮仓内余量不足"),
-                new SendSubscribeMessageDTO.PlaceHolder("phrase10", "宠物粮仓内余量不足")));
+
+        wechatService.sendWechatMessage(SendSubscribeMessageDTO.buildJson(wechatId, wechatService.getFoodShortageReminderTemplate(),
+                new SendSubscribeMessageDTO.PlaceHolder("thing1", "宠物粮仓内余粮不足请及时补充"),
+                new SendSubscribeMessageDTO.PlaceHolder("time3", CommonUtils.getyyyymmddHHmmss())));
     }
 
     public void dealFoodDetectSilo(Session session, Message msg) throws ExecutionException, InterruptedException {
@@ -161,6 +179,10 @@ public class WCServer {
     }
 
     public CompletableFuture<Message> sendMsg(String deviceId, Message msg) {
+        if (!isDeviceOnline(deviceId)) {
+            log.info("device {} 不在线，无法发送消息", deviceId);
+        }
+
         CompletableFuture<Message> result = new CompletableFuture<>();
         try {
             clientMap.get(deviceId).getBasicRemote().sendText(msg.toString());
@@ -175,6 +197,9 @@ public class WCServer {
     }
 
     public void sendMsgNoReturn(String deviceId, Message msg) {
+        if (!isDeviceOnline(deviceId)) {
+            log.info("device {} 不在线，无法发送消息", deviceId);
+        }
         try {
             clientMap.get(deviceId).getBasicRemote().sendText(msg.toString());
         } catch (IOException e) {
@@ -186,5 +211,9 @@ public class WCServer {
     public static String getOnlineDevice() {
         log.info("online device {}", clientMap.keySet());
         return clientMap.keySet().stream().collect(Collectors.joining(","));
+    }
+
+    public boolean isDeviceOnline(String deviceId) {
+        return clientMap.containsKey(deviceId);
     }
 }

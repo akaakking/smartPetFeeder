@@ -65,6 +65,10 @@ public class PetService {
         return petMapper.selectList(new QueryWrapper<PetDTO>().eq("user_id", userId));
     }
 
+    public PetDTO findPetByDeviceId(String deviceId) {
+        return petMapper.selectOne(new QueryWrapper<PetDTO>().eq("device_id", deviceId));
+    }
+
     public void deletePet(Integer id) {
         petMapper.deleteById(id);
     }

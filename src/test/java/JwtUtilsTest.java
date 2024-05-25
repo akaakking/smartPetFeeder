@@ -4,6 +4,9 @@ import org.wlc.feeder.dto.FeedPlan;
 import org.wlc.feeder.dto.wechat.SendSubscribeMessageDTO;
 import org.wlc.feeder.util.JwtUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * //TODO add class commment here
  *
@@ -35,6 +38,8 @@ public class JwtUtilsTest {
 
     @Test
     public void JsonTs() {
-        System.out.println(SendSubscribeMessageDTO.buildJson("123", "123", new SendSubscribeMessageDTO.PlaceHolder("ty","1234"), new SendSubscribeMessageDTO.PlaceHolder("thing", "123")));
-    }
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
+        String formattedNow = now.format(formatter);
+        System.out.println(formattedNow);    }
 }

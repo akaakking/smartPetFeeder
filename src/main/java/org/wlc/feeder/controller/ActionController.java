@@ -50,4 +50,14 @@ public class ActionController {
     public void cameraMove(@RequestParam String deviceId, @RequestParam Integer direction) {
         actionService.cameraMove(deviceId, direction);
     }
+
+    @GetMapping("/action/camera/regular")
+    public ResponseEntity<String> cameraRegular(@RequestParam String deviceId, @RequestParam Boolean status) throws InterruptedException {
+        return ResponseEntity.ok(actionService.cameraRegular(deviceId, status));
+    }
+
+    @GetMapping("/action/camera/detect")
+    public ResponseEntity<String> cameraDetect(@RequestParam String deviceId, @RequestParam Boolean status) throws InterruptedException {
+        return ResponseEntity.ok(actionService.cameraDetect(deviceId, status));
+    }
 }
