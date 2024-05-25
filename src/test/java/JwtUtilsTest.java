@@ -21,25 +21,8 @@ public class JwtUtilsTest {
     }
 
     @Test
-    public void dfsd() {
-        FeedPlan feedPlan = new FeedPlan();
-        feedPlan.setBreakfast("16:38");
-        feedPlan.setLunch("18:00");
-        feedPlan.setDinner("19:00");
-        System.out.println(GsonSingleton.getInstance().toJson(feedPlan));
-
-    }
-
-    @Test
     public void testValidateAndGetOpenId() {
         String token = JwtUtils.generateToken("123");
         System.out.println(JwtUtils.validateAndGetOpenId(token));
     }
-
-    @Test
-    public void JsonTs() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
-        String formattedNow = now.format(formatter);
-        System.out.println(formattedNow);    }
 }

@@ -67,7 +67,7 @@ public class ActionService {
 
     public String cameraDetect(String deviceId, Boolean status) throws InterruptedException {
         int switc = status ? 1 : 0;
-        wcServer.sendMsgNoReturn(deviceId, new Message("camera_regular", switc));
+        wcServer.sendMsgNoReturn(deviceId, new Message("camera_detect", switc));
         Thread.sleep(500);
         return "rtmp://"  + serverIp + ":1935/live/" + deviceId;
     }

@@ -20,7 +20,6 @@ public class BlogMapperTest {
     @Test
     public void insertBlogContainEmoji() {
         BlogDTO blogDTO  = new BlogDTO(null,123,"rfsdfdsfdsfds", "①狗粮➕自制（添加鸡胸肉\uD83E\uDD69➕蔬菜\uD83E\uDD6C➕水果\uD83C\uDF49）适口性高，锻炼胃消化能力", "①狗粮➕自制（添加鸡胸肉\uD83E\uDD69➕蔬菜\uD83E\uDD6C➕水果\uD83C\uDF49）适口性高，锻炼胃消化能力");
-
         blogMapper.insert(blogDTO);
     }
 }
