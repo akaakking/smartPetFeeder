@@ -20,7 +20,7 @@ public class PetModifyDTO {
     private String petType;
     private String avatar;
     private String description;
-    private String feedTimeGap;
+    private String duration;
     private String breakfast;
     private String lunch;
     private String dinner;

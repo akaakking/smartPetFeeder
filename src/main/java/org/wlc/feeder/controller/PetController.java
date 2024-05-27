@@ -63,7 +63,7 @@ public class PetController {
     }
 
     @PostMapping("/pet/modify")
-    public ResponseEntity<String> modifyPet(@ModelAttribute PetModifyDTO petModifyDTO, @RequestHeader("Authorization") String token) throws BizException, IOException {
+    public ResponseEntity<String> modifyPet(@RequestBody PetModifyDTO petModifyDTO, @RequestHeader("Authorization") String token) throws BizException, IOException {
         log.info("modify pet: {}", GsonSingleton.getInstance().toJson(petModifyDTO));
 
         // 检验device是否存在, 还需要检查，是否是一个宠物一个device

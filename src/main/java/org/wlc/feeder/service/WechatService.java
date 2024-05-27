@@ -101,11 +101,22 @@ public class WechatService {
 
     // 两种订阅消息 1. 提醒用户喂食成功/失败 2. 提醒用户粮食没有了
     public void sendWechatMessage(String message) {
+        if (accessToken == null) {
+            try {
+                accessToken = fetchNewAccessToken();
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         log.info("sendWechatMessage accessToken {}", accessToken);
         String url = String.format(SEND_SUBSCRIBE_MESSAGE_URL, accessToken);
 
         try {
-            HttpUtil.post(url, message);
+            String post = HttpUtil.post(url, message);
+            log.info("sendWechatMessage response {}", post);
         } catch (Exception e) {
             log.error("sendWechatMessage error: {}", e.getMessage(),e);
         }

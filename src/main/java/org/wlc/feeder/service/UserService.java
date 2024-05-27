@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public UserDTO getUserInfo(Integer openId) {
-        return userMapper.selectOne(new QueryWrapper<UserDTO>().eq("id", openId));
+        return userMapper.selectById(openId);
     }
 
     public UserDTO saveWechatUser(String wechatId) {

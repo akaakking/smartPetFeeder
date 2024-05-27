@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class CommonUtils {
     public static String getyyyymmddHHmmss() {
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         return now.format(formatter);
     }

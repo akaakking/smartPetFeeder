@@ -43,7 +43,7 @@ CREATE TABLE pet
     birthdate     DATE,
     pet_type      VARCHAR(255),
     avatar        VARCHAR(255),
-    feed_time_gap VARCHAR(255),
+    duration      INT,
     breakfast     VARCHAR(255),
     lunch         VARCHAR(255),
     dinner        VARCHAR(255),

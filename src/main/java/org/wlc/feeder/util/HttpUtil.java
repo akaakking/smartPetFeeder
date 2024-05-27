@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * //TODO add class commment here
@@ -45,8 +46,7 @@ public class HttpUtil {
 
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-
-        StringEntity input = new StringEntity(message);
+        StringEntity input = new StringEntity(message, StandardCharsets.UTF_8);
         httpPost.setEntity(input);
 
         CloseableHttpClient httpClient = HttpClients.createDefault();

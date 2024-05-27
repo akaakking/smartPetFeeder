@@ -17,7 +17,6 @@ import org.wlc.feeder.service.WechatService;
 import org.wlc.feeder.util.AppContextUtil;
 import org.wlc.feeder.util.CommonUtils;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -103,20 +102,20 @@ public class WCServer {
 
     private void feedComplete(Session session) {
         String deviceId = clientMap.inverse().get(session);
-        Integer deviceOwner = deviceService.findDeviceOwner(Integer.valueOf(deviceId));
+        Integer deviceOwner = petService.findPetByDeviceId(deviceId).getUserId();
         String wechatId = userService.getUserInfo(deviceOwner).getWechatId();
         String petName = petService.findPetByDeviceId(deviceId).getName();
 
         wechatService.sendWechatMessage(SendSubscribeMessageDTO.buildJson(wechatId, wechatService.getPetFeedingReminderTemplate(),
                 new SendSubscribeMessageDTO.PlaceHolder("name1", petName),
-                new SendSubscribeMessageDTO.PlaceHolder("phrase2", "宠物定时喂食"),
+                new SendSubscribeMessageDTO.PlaceHolder("phrase2", "定时喂食"),
                 new SendSubscribeMessageDTO.PlaceHolder("date3", CommonUtils.getyyyymmddHHmmss()),
                 new SendSubscribeMessageDTO.PlaceHolder("thing5", "已完成宠物食物的定点投送")));
     }
 
     private void regular_test_bowl(Session session) {
         String deviceId = clientMap.inverse().get(session);
-        Integer deviceOwner = deviceService.findDeviceOwner(Integer.valueOf(deviceId));
+        Integer deviceOwner = petService.findPetByDeviceId(deviceId).getUserId();
         String wechatId = userService.getUserInfo(deviceOwner).getWechatId();
 
 
@@ -127,7 +126,7 @@ public class WCServer {
 
     private void regular_test_silo(Session session) {
         String deviceId = clientMap.inverse().get(session);
-        Integer deviceOwner = deviceService.findDeviceOwner(Integer.valueOf(deviceId));
+        Integer deviceOwner = petService.findPetByDeviceId(deviceId).getUserId();
         String wechatId = userService.getUserInfo(deviceOwner).getWechatId();
 
 
